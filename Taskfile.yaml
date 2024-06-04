@@ -1,0 +1,66 @@
+version: '3'
+
+vars:
+  coverout: "cover.out"
+  htmlout: "cover.html"
+  covercount: 70
+  dockerName: "DEMO_ADMINAUTH_admin"
+
+
+tasks:
+  # 测试
+  test:
+    cmds:
+      - go install github.com/jstemmer/go-junit-report@latest
+
+      - go test -cover -v
+        -coverprofile="{{.coverout}}"
+        -coverpkg={{.pkgs}}
+        ./... | go-junit-report --set-exit-code > report.xml
+
+      - go tool cover -html={{.coverout}} -o {{.htmlout}}
+
+      - go tool cover -func={{.coverout}} | grep 'total:' | gawk -v target={{.covercount}} -f ./script/cover.awk
+
+    vars:
+      pkgs:
+        sh: go list ./... |grep 'api' | grep -v 'api_test'|  grep -v 'pkg' |tr '\n' ',' | sed 's/.$//g'
+  testx:
+    cmds:
+      - go install github.com/jstemmer/go-junit-report@latest
+
+      - go test -cover -v
+        -coverprofile="{{.coverout}}"
+        -coverpkg={{.pkgs}}
+        ./...
+
+    vars:
+      pkgs:
+        sh: go list ./... |grep 'api' | grep -v 'api_test'| grep -v 'pkg'  | tr '\n' ',' | sed 's/.$//g'
+
+  # 文档
+  doc:
+    - go install github.com/dangweiwu/apidoc@latest
+    - apidoc run
+
+  swag:
+    - go install github.com/swaggo/swag/cmd/swag@latest
+    - swag fmt
+    - swag init --pd --parseInternal -o doc/swag
+
+  # 部署开发docker-compose
+  devInitDocker:
+    dir: ./deploy/docker_compose
+    cmds:
+      - docker-compose -p demox_adminauth -f docker-compose.yaml up -d
+  devInitDb:
+    - docker exec -it {{.dockerName}} go run ./cmd/server/main.go -f ./config/config.yaml inittable
+
+  devInitSuperUser:
+    - docker exec -it {{.dockerName}} go run ./cmd/server/main.go -f ./config/config.yaml initsuperuser
+
+  devRun:
+    - docker exec -it {{.dockerName}} go run ./cmd/server/main.go -f ./config/config.yaml run
+
+  devBuild:
+    - docker exec -it {{.dockerName}} go build ./cmd/server/main.go

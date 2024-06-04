@@ -1,0 +1,2040 @@
+
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+		<title>api: Go Coverage Report</title>
+		<style>
+			body {
+				background: black;
+				color: rgb(80, 80, 80);
+			}
+			body, pre, #legend span {
+				font-family: Menlo, monospace;
+				font-weight: bold;
+			}
+			#topbar {
+				background: black;
+				position: fixed;
+				top: 0; left: 0; right: 0;
+				height: 42px;
+				border-bottom: 1px solid rgb(80, 80, 80);
+			}
+			#content {
+				margin-top: 50px;
+			}
+			#nav, #legend {
+				float: left;
+				margin-left: 10px;
+			}
+			#legend {
+				margin-top: 12px;
+			}
+			#nav {
+				margin-top: 10px;
+			}
+			#legend span {
+				margin: 0 5px;
+			}
+			.cov0 { color: rgb(192, 0, 0) }
+.cov1 { color: rgb(128, 128, 128) }
+.cov2 { color: rgb(116, 140, 131) }
+.cov3 { color: rgb(104, 152, 134) }
+.cov4 { color: rgb(92, 164, 137) }
+.cov5 { color: rgb(80, 176, 140) }
+.cov6 { color: rgb(68, 188, 143) }
+.cov7 { color: rgb(56, 200, 146) }
+.cov8 { color: rgb(44, 212, 149) }
+.cov9 { color: rgb(32, 224, 152) }
+.cov10 { color: rgb(20, 236, 155) }
+
+		</style>
+	</head>
+	<body>
+		<div id="topbar">
+			<div id="nav">
+				<select id="files">
+				
+				<option value="file0">DEMOX_ADMINAUTH/internal/app/admin/api/create.go (88.5%)</option>
+				
+				<option value="file1">DEMOX_ADMINAUTH/internal/app/admin/api/del.go (79.2%)</option>
+				
+				<option value="file2">DEMOX_ADMINAUTH/internal/app/admin/api/query.go (92.3%)</option>
+				
+				<option value="file3">DEMOX_ADMINAUTH/internal/app/admin/api/resetPwd.go (91.7%)</option>
+				
+				<option value="file4">DEMOX_ADMINAUTH/internal/app/admin/api/update.go (56.8%)</option>
+				
+				<option value="file5">DEMOX_ADMINAUTH/internal/app/auth/api/create.go (77.8%)</option>
+				
+				<option value="file6">DEMOX_ADMINAUTH/internal/app/auth/api/delete.go (68.0%)</option>
+				
+				<option value="file7">DEMOX_ADMINAUTH/internal/app/auth/api/getUrl.go (100.0%)</option>
+				
+				<option value="file8">DEMOX_ADMINAUTH/internal/app/auth/api/query.go (80.0%)</option>
+				
+				<option value="file9">DEMOX_ADMINAUTH/internal/app/auth/api/update.go (73.1%)</option>
+				
+				<option value="file10">DEMOX_ADMINAUTH/internal/app/my/api/getAuth.go (79.5%)</option>
+				
+				<option value="file11">DEMOX_ADMINAUTH/internal/app/my/api/info.go (63.6%)</option>
+				
+				<option value="file12">DEMOX_ADMINAUTH/internal/app/my/api/login.go (73.5%)</option>
+				
+				<option value="file13">DEMOX_ADMINAUTH/internal/app/my/api/logout.go (90.0%)</option>
+				
+				<option value="file14">DEMOX_ADMINAUTH/internal/app/my/api/refreshToken.go (70.0%)</option>
+				
+				<option value="file15">DEMOX_ADMINAUTH/internal/app/my/api/update.go (45.5%)</option>
+				
+				<option value="file16">DEMOX_ADMINAUTH/internal/app/my/api/updatePwd.go (81.0%)</option>
+				
+				<option value="file17">DEMOX_ADMINAUTH/internal/app/role/api/create.go (88.2%)</option>
+				
+				<option value="file18">DEMOX_ADMINAUTH/internal/app/role/api/delete.go (70.0%)</option>
+				
+				<option value="file19">DEMOX_ADMINAUTH/internal/app/role/api/query.go (92.3%)</option>
+				
+				<option value="file20">DEMOX_ADMINAUTH/internal/app/role/api/setAuth.go (72.0%)</option>
+				
+				<option value="file21">DEMOX_ADMINAUTH/internal/app/role/api/update.go (74.1%)</option>
+				
+				<option value="file22">DEMOX_ADMINAUTH/internal/app/sys/api/act.go (65.4%)</option>
+				
+				<option value="file23">DEMOX_ADMINAUTH/internal/app/sys/api/info.go (83.3%)</option>
+				
+				</select>
+			</div>
+			<div id="legend">
+				<span>not tracked</span>
+			
+				<span class="cov0">not covered</span>
+				<span class="cov8">covered</span>
+			
+			</div>
+		</div>
+		<div id="content">
+		
+		<pre class="file" id="file0" style="display: none">package api
+
+import (
+        "DEMOX_ADMINAUTH/internal/app/admin/adminmodel"
+        "DEMOX_ADMINAUTH/internal/ctx"
+        "DEMOX_ADMINAUTH/internal/pkg"
+        "DEMOX_ADMINAUTH/internal/pkg/api/hd"
+        "DEMOX_ADMINAUTH/internal/router/irouter"
+        "errors"
+        "github.com/gin-gonic/gin"
+        errs "github.com/pkg/errors"
+)
+
+type AdminCreate struct {
+        *hd.Hd
+        ctx    *gin.Context
+        appctx *ctx.AppContext
+}
+
+func NewAdminCreate(c *gin.Context, appctx *ctx.AppContext) irouter.IHandler <span class="cov8" title="1">{
+        return &amp;AdminCreate{hd.NewHd(c), c, appctx}
+}</span>
+
+// Do
+// @api     | admin | 1 |创建用户
+// @path    | /api/admin
+// @method  | POST
+// @header  |n Authorization |d token |t string |c 鉴权
+// @form    | adminmodel.AdminForm
+// @tbtitle  | 200 Response
+// @tbrow    |n data |e ok |c 成功 |t string
+func (this *AdminCreate) Do() error <span class="cov8" title="1">{
+
+        //数据源
+        po := &amp;adminmodel.AdminForm{}
+        err := this.Bind(po)
+        if err != nil </span><span class="cov8" title="1">{
+                return err
+        }</span>
+
+        <span class="cov8" title="1">err = this.Create(po)
+        if err != nil </span><span class="cov8" title="1">{
+                return err
+        }</span>
+        <span class="cov8" title="1">this.RepOk()
+        return nil</span>
+}
+
+func (this *AdminCreate) Create(po *adminmodel.AdminForm) error <span class="cov8" title="1">{
+        db := this.appctx.Db
+        //验证是否已创建 或者其他检查
+        if err := this.Valid(po); err != nil </span><span class="cov8" title="1">{
+                return err
+        }</span>
+
+        <span class="cov8" title="1">po.Password = pkg.GetPassword(po.Password)
+        if po.IsSuperAdmin == "1" </span><span class="cov0" title="0">{
+                po.Role = ""
+        }</span>
+        <span class="cov8" title="1">if r := db.Create(po); r.Error != nil </span><span class="cov0" title="0">{
+                return r.Error
+        }</span>
+        <span class="cov8" title="1">return nil</span>
+}
+
+func (this *AdminCreate) Valid(po *adminmodel.AdminForm) error <span class="cov8" title="1">{
+        db := this.appctx.Db
+        var ct = int64(0)
+        if r := db.Model(po).Where("account = ?", po.Account).Count(&amp;ct); r.Error != nil </span><span class="cov0" title="0">{
+                return errs.WithMessage(r.Error, "校验失败")
+        }</span> else<span class="cov8" title="1"> if ct != 0 </span><span class="cov8" title="1">{
+                return errors.New("账号已存在")
+        }</span>
+
+        /*
+                if po.Phone != "" {
+                        if r := db.Model(po).Where("phone = ?", po.Phone).Count(&amp;ct); r.Error != nil {
+                                return errs.WithMessage(r.Error, "校验失败")
+                        } else if ct != 0 {
+                                return errors.New("手机号已存在")
+                        }
+                }
+
+                if po.Email != "" {
+                        if r := db.Model(po).Where("email = ?", po.Email).Count(&amp;ct); r.Error != nil {
+                                return errs.WithMessage(r.Error, "校验失败")
+                        } else if ct != 0 {
+                                return errors.New("Email已存在")
+                        }
+                }
+        */
+        <span class="cov8" title="1">return nil</span>
+}
+</pre>
+		
+		<pre class="file" id="file1" style="display: none">package api
+
+import (
+        "DEMOX_ADMINAUTH/internal/app/admin/adminmodel"
+        "DEMOX_ADMINAUTH/internal/ctx"
+        "DEMOX_ADMINAUTH/internal/pkg/api/hd"
+        "DEMOX_ADMINAUTH/internal/pkg/jwtx"
+        "DEMOX_ADMINAUTH/internal/router/irouter"
+        "errors"
+        "github.com/gin-gonic/gin"
+        "gorm.io/gorm"
+)
+
+type AdminDel struct {
+        *hd.Hd
+        ctx    *gin.Context
+        appctx *ctx.AppContext
+}
+
+func NewAdminDel(c *gin.Context, appctx *ctx.AppContext) irouter.IHandler <span class="cov8" title="1">{
+        return &amp;AdminDel{hd.NewHd(c), c, appctx}
+}</span>
+
+// Do
+// @api | admin | 5 | 删除用户
+// @path | /api/admin/:id
+// @method | DELETE
+// @header         |n Authorization |d token |e tokenstring |c 鉴权 |t string
+// @urlparam |n id |d 用户ID |v required |t int    |e 1
+// @tbtitle  | 200 Response
+// @tbrow    |n data |e ok |c 成功 |t type
+// @response | hd.ErrResponse | 500 RESPONSE
+// @tbtitle  | msg 数据
+// @tbrow    |n msg |e 禁止删除自己
+// @tbrow    |n msg |e 记录不存在
+func (this *AdminDel) Do() error <span class="cov8" title="1">{
+        var err error
+        id, err := this.GetId()
+        if err != nil </span><span class="cov0" title="0">{
+                return err
+        }</span>
+
+        <span class="cov8" title="1">uid, err := jwtx.GetUid(this.ctx)
+        if err != nil </span><span class="cov0" title="0">{
+                return err
+        }</span>
+
+        <span class="cov8" title="1">if id == uid </span><span class="cov0" title="0">{
+                return errors.New("禁止删除自己")
+        }</span>
+
+        <span class="cov8" title="1">if err := this.Delete(id); err != nil </span><span class="cov8" title="1">{
+                return err
+        }</span> else<span class="cov8" title="1"> {
+                this.RepOk()
+                return nil
+        }</span>
+}
+
+func (this *AdminDel) Delete(id int64) error <span class="cov8" title="1">{
+        db := this.appctx.Db
+        po := &amp;adminmodel.AdminPo{}
+        po.ID = id
+        if r := db.Take(po); r.Error != nil </span><span class="cov8" title="1">{
+                if r.Error == gorm.ErrRecordNotFound </span><span class="cov8" title="1">{
+                        return errors.New("记录不存在")
+                }</span> else<span class="cov0" title="0"> {
+                        return r.Error
+                }</span>
+        }
+        <span class="cov8" title="1">if r := db.Delete(po); r.Error != nil </span><span class="cov0" title="0">{
+                return r.Error
+        }</span>
+        <span class="cov8" title="1">return nil</span>
+}
+</pre>
+		
+		<pre class="file" id="file2" style="display: none">package api
+
+import (
+        "DEMOX_ADMINAUTH/internal/app/admin/adminmodel"
+        "DEMOX_ADMINAUTH/internal/ctx"
+        "DEMOX_ADMINAUTH/internal/pkg/api/hd"
+        "DEMOX_ADMINAUTH/internal/pkg/api/query"
+        "DEMOX_ADMINAUTH/internal/router/irouter"
+        "github.com/gin-gonic/gin"
+)
+
+type AdminQuery struct {
+        *hd.Hd
+        ctx    *gin.Context
+        appctx *ctx.AppContext
+}
+
+func NewAdminQuery(c *gin.Context, appctx *ctx.AppContext) irouter.IHandler <span class="cov8" title="1">{
+        return &amp;AdminQuery{hd.NewHd(c), c, appctx}
+}</span>
+
+// Do
+// @api         | admin | 4 | 查询用户
+// @path         | /api/admin
+// @method         | GET
+// @header         |n Authorization |d token |e tokenstring |c 鉴权 |t string
+// @query   |n limit   |d 条数 |e 10 |t int
+// @query   |n current |d 页码 |e 1  |t int
+// @query         |n account |d 账号 |e admin | t string
+// @query   |n phone   |d 手机号 |e 12345678911 |t int
+// @query   |n email   |d email
+// @query   |n name    |d 姓名
+// @response | query.QueryResult | 200 Response
+// @response | query.Page | Page定义
+// @response | adminmodel.AdminVo | []Data 定义
+func (this *AdminQuery) Do() error <span class="cov8" title="1">{
+        data, err := this.Query()
+        if err != nil </span><span class="cov0" title="0">{
+                return err
+        }</span> else<span class="cov8" title="1"> {
+                this.Rep(data)
+                return nil
+        }</span>
+}
+
+var QueryRule = map[string]string{
+        "account": "like",
+        "phone":   "like",
+        "email":   "like",
+        "name":    "like",
+}
+
+func (this *AdminQuery) Query() (interface{}, error) <span class="cov8" title="1">{
+        span := this.appctx.Tracer.GinStart(this.ctx, "dbstart")
+        defer span.End()
+        po := &amp;adminmodel.AdminVo{}
+        pos := []adminmodel.AdminVo{}
+        q := query.NewQuery(this.ctx, this.appctx.Db, QueryRule, po, &amp;pos)
+        /*
+                q.SetWhere(func(db *gorm.DB) (r *gorm.DB) {
+                        db = db.Preload("RolePo")
+                        return q.Where(db)
+                })
+        */
+        span.AddEvent("dbstart")
+        return q.Do()
+}</span>
+</pre>
+		
+		<pre class="file" id="file3" style="display: none">package api
+
+import (
+        "DEMOX_ADMINAUTH/internal/app/admin/adminmodel"
+        "DEMOX_ADMINAUTH/internal/app/my/mymodel"
+        "DEMOX_ADMINAUTH/internal/ctx"
+        "DEMOX_ADMINAUTH/internal/pkg"
+        "DEMOX_ADMINAUTH/internal/pkg/api/hd"
+        "DEMOX_ADMINAUTH/internal/pkg/jwtx"
+        "DEMOX_ADMINAUTH/internal/router/irouter"
+        "context"
+        "errors"
+        "github.com/gin-gonic/gin"
+        "gorm.io/gorm"
+        "math/rand"
+        "time"
+)
+
+/*
+重置账号密码
+*/
+
+type ResetPassword struct {
+        *hd.Hd
+        ctx    *gin.Context
+        appctx *ctx.AppContext
+}
+
+func NewResetPassword(c *gin.Context, appctx *ctx.AppContext) irouter.IHandler <span class="cov8" title="1">{
+        return &amp;ResetPassword{hd.NewHd(c), c, appctx}
+}</span>
+
+// Do
+// @api         | admin | 3 | 修改密码
+// @path         | /api/admin/resetpwd/:id
+// @method         | PUT
+// @urlparam |n id |d 用户ID |v required |t int    |e 1
+// @header   |n Authorization |d token  |t string |c 鉴权
+// @tbtitle  | 200 Response
+// @tbrow    |n data |d 新密码 |c 数字与字母组合的随机6位密码 |t string
+func (this *ResetPassword) Do() error <span class="cov8" title="1">{
+        var err error
+        id, err := this.GetId()
+        if err != nil </span><span class="cov0" title="0">{
+                return err
+        }</span>
+        <span class="cov8" title="1">po := &amp;adminmodel.AdminPo{}
+        po.ID = id
+        pwd, err := this.ResetPassword(po)
+        if err != nil </span><span class="cov8" title="1">{
+                return err
+        }</span>
+        <span class="cov8" title="1">this.Rep(hd.Response{pwd})
+        return nil</span>
+}
+
+func (this *ResetPassword) ResetPassword(rawPo *adminmodel.AdminPo) (string, error) <span class="cov8" title="1">{
+
+        id, err := jwtx.GetUid(this.ctx)
+        if err != nil </span><span class="cov0" title="0">{
+                return "", err
+        }</span>
+        <span class="cov8" title="1">if id == rawPo.ID </span><span class="cov8" title="1">{
+                return "", errors.New("不能重置自己密码")
+        }</span>
+
+        <span class="cov8" title="1">po := &amp;adminmodel.AdminPo{}
+        if r := this.appctx.Db.Model(po).Where("id=?", rawPo.ID).Take(po); r.Error != nil </span><span class="cov8" title="1">{
+                if r.Error == gorm.ErrRecordNotFound </span><span class="cov8" title="1">{
+                        return "", errors.New("记录不存在")
+                }</span> else<span class="cov0" title="0"> {
+                        return "", r.Error
+                }</span>
+        }
+
+        <span class="cov8" title="1">_pwd := this.newPwd()
+        pwd := pkg.GetPassword(_pwd)
+        r := this.appctx.Db.Model(po).Update("password", pwd)
+
+        //踢出在线
+        this.appctx.Redis.Del(context.Background(), mymodel.GetAdminRedisLoginId(this.appctx.Config.App.Name, int(po.ID)))
+
+        //删除刷新token
+        this.appctx.Redis.Del(context.Background(), mymodel.GetAdminRedisRefreshTokenId(this.appctx.Config.App.Name, int(po.ID)))
+        return _pwd, r.Error</span>
+}
+
+// 生成三位字符，三位数字的密码
+var ltes = "abcdefghijkmnpqrstuvwxyz"
+var nums = "0123456789"
+
+func (this *ResetPassword) newPwd() string <span class="cov8" title="1">{
+
+        rt := ""
+        for i := 0; i &lt; 3; i++ </span><span class="cov8" title="1">{
+                rand.Seed(time.Now().UnixNano() + int64(rand.Intn(100)))
+                rt += string(ltes[rand.Intn(len(ltes))])
+        }</span>
+        <span class="cov8" title="1">for i := 0; i &lt; 3; i++ </span><span class="cov8" title="1">{
+                rand.Seed(time.Now().UnixNano() + int64(rand.Intn(100)))
+                rt += string(nums[rand.Intn(len(nums))])
+        }</span>
+        <span class="cov8" title="1">return rt</span>
+}
+</pre>
+		
+		<pre class="file" id="file4" style="display: none">package api
+
+import (
+        "DEMOX_ADMINAUTH/internal/app/admin/adminmodel"
+        "DEMOX_ADMINAUTH/internal/app/my/mymodel"
+        "DEMOX_ADMINAUTH/internal/ctx"
+        "DEMOX_ADMINAUTH/internal/pkg/api/hd"
+        "DEMOX_ADMINAUTH/internal/pkg/jwtx"
+        "DEMOX_ADMINAUTH/internal/router/irouter"
+        "context"
+        "errors"
+        "github.com/gin-gonic/gin"
+        errs "github.com/pkg/errors"
+        "gorm.io/gorm"
+)
+
+type AdminUpdate struct {
+        *hd.Hd
+        ctx    *gin.Context
+        appctx *ctx.AppContext
+}
+
+func NewAdminUpdate(c *gin.Context, appctx *ctx.AppContext) irouter.IHandler <span class="cov8" title="1">{
+        return &amp;AdminUpdate{hd.NewHd(c), c, appctx}
+}</span>
+
+// Do
+// @api         | admin | 2 | 修改用户
+// @path         | /api/admin/:id
+// @method         | PUT
+// @urlparam |n id |d 用户ID |v required |t int    |e 1
+// @header   |n Authorization |d token  |t string |c 鉴权
+// @form     | adminmodel.AdminUpdateForm
+// @tbtitle  | 200 Response
+// @tbrow    |n data |e ok |c 成功 |t string
+func (this *AdminUpdate) Do() error <span class="cov8" title="1">{
+        var err error
+        id, err := this.GetId()
+        if err != nil </span><span class="cov0" title="0">{
+                return err
+        }</span>
+        <span class="cov8" title="1">po := &amp;adminmodel.AdminUpdateForm{}
+        err = this.Bind(po)
+        if err != nil </span><span class="cov0" title="0">{
+                return err
+        }</span>
+        <span class="cov8" title="1">po.ID = id
+        err = this.Update(po)
+        if err != nil </span><span class="cov8" title="1">{
+                return err
+        }</span>
+        <span class="cov8" title="1">this.RepOk()
+        return nil</span>
+}
+func (this *AdminUpdate) Update(po *adminmodel.AdminUpdateForm) error <span class="cov8" title="1">{
+        db := this.appctx.Db
+        tmpPo := &amp;adminmodel.AdminUpdateForm{}
+        tmpPo.ID = po.ID
+        if r := db.Model(tmpPo).Take(tmpPo); r.Error != nil </span><span class="cov0" title="0">{
+                if r.Error == gorm.ErrRecordNotFound </span><span class="cov0" title="0">{
+                        return errors.New("记录不存在")
+                }</span> else<span class="cov0" title="0"> {
+                        return r.Error
+                }</span>
+        }
+        <span class="cov8" title="1">uid, err := jwtx.GetUid(this.ctx)
+        if err != nil </span><span class="cov0" title="0">{
+                return err
+        }</span>
+
+        <span class="cov8" title="1">if uid == po.ID </span><span class="cov8" title="1">{
+                return errors.New("禁止修改自己")
+        }</span>
+
+        //其他校验
+        /*
+                if err := this.Valid(po); err != nil {
+                        return err
+                }
+        */
+
+        //更新
+        <span class="cov8" title="1">if r := db.Select("phone", "name", "status", "memo", "email", "is_super_admin", "updated_at").Updates(po); r.Error != nil </span><span class="cov0" title="0">{
+                return r.Error
+        }</span>
+        //修改人员下线
+        <span class="cov8" title="1">if (tmpPo.Status == "1" &amp;&amp; po.Status == "0") || tmpPo.Role != po.Role </span><span class="cov8" title="1">{
+                this.appctx.Redis.Del(context.Background(), mymodel.GetAdminRedisLoginId(this.appctx.Config.App.Name, int(tmpPo.ID)))
+        }</span>
+
+        <span class="cov8" title="1">return nil</span>
+}
+
+func (this *AdminUpdate) Valid(po *adminmodel.AdminUpdateForm) error <span class="cov0" title="0">{
+        var ct = int64(0)
+        if po.Phone != "" </span><span class="cov0" title="0">{
+                if r := this.appctx.Db.Model(po).Where("id != ? and phone = ? ", po.ID, po.Phone).Count(&amp;ct); r.Error != nil </span><span class="cov0" title="0">{
+                        return errs.WithMessage(r.Error, "校验失败")
+                }</span> else<span class="cov0" title="0"> if ct != 0 </span><span class="cov0" title="0">{
+                        return errors.New("手机号已存在")
+                }</span>
+        }
+
+        <span class="cov0" title="0">if po.Email != "" </span><span class="cov0" title="0">{
+                if r := this.appctx.Db.Model(po).Where("id != ? and email = ?", po.ID, po.Email).Count(&amp;ct); r.Error != nil </span><span class="cov0" title="0">{
+                        return errs.WithMessage(r.Error, "校验失败")
+                }</span> else<span class="cov0" title="0"> if ct != 0 </span><span class="cov0" title="0">{
+                        return errors.New("Email已存在")
+                }</span>
+        }
+
+        <span class="cov0" title="0">return nil</span>
+}
+</pre>
+		
+		<pre class="file" id="file5" style="display: none">package api
+
+import (
+        "DEMOX_ADMINAUTH/internal/app/auth/authmodel"
+        "DEMOX_ADMINAUTH/internal/ctx"
+        "DEMOX_ADMINAUTH/internal/pkg/api/hd"
+        "DEMOX_ADMINAUTH/internal/router/irouter"
+        "errors"
+        "github.com/gin-gonic/gin"
+)
+
+type AuthCreate struct {
+        *hd.Hd
+        ctx    *gin.Context
+        appctx *ctx.AppContext
+}
+
+func NewAuthCreate(c *gin.Context, appctx *ctx.AppContext) irouter.IHandler <span class="cov8" title="1">{
+        return &amp;AuthCreate{hd.NewHd(c), c, appctx}
+}</span>
+
+// Do
+// @api | auth | 1 | 创建权限
+// @path    | /api/auth
+// @method  | POST
+// @header  |n Authorization |d token |t string |c 鉴权
+// @form    | authmodel.AuthForm
+// @tbtitle  | 200 Response
+// @tbrow    |n data |e ok |c 成功 |t string
+func (this *AuthCreate) Do() error <span class="cov8" title="1">{
+        //数据源
+        po := &amp;authmodel.AuthForm{}
+        err := this.Bind(po)
+        if err != nil </span><span class="cov0" title="0">{
+                return err
+        }</span>
+
+        <span class="cov8" title="1">err = this.Create(po)
+        if err != nil </span><span class="cov0" title="0">{
+                return err
+        }</span>
+
+        <span class="cov8" title="1">this.appctx.AuthCheck.LoadPolicy()
+        this.RepOk()
+        return nil</span>
+}
+
+func (this *AuthCreate) Create(po *authmodel.AuthForm) error <span class="cov8" title="1">{
+        db := this.appctx.Db
+        //验证是否已创建 或者其他检查
+        tmpPo := &amp;authmodel.AuthPo{}
+        if r := db.Model(po).Where("code = ?", po.Code).Take(tmpPo); r.Error == nil </span><span class="cov0" title="0">{
+                return errors.New("权限编码已存在")
+        }</span>
+
+        <span class="cov8" title="1">if r := db.Create(po); r.Error != nil </span><span class="cov0" title="0">{
+                return r.Error
+        }</span>
+        <span class="cov8" title="1">return nil</span>
+}
+</pre>
+		
+		<pre class="file" id="file6" style="display: none">package api
+
+import (
+        "DEMOX_ADMINAUTH/internal/app/auth/authmodel"
+        "DEMOX_ADMINAUTH/internal/ctx"
+        "DEMOX_ADMINAUTH/internal/pkg/api/hd"
+        "DEMOX_ADMINAUTH/internal/router/irouter"
+        "errors"
+        "github.com/gin-gonic/gin"
+        "gorm.io/gorm"
+)
+
+type AuthDel struct {
+        *hd.Hd
+        ctx    *gin.Context
+        appctx *ctx.AppContext
+}
+
+func NewAuthDel(c *gin.Context, appctx *ctx.AppContext) irouter.IHandler <span class="cov8" title="1">{
+        return &amp;AuthDel{hd.NewHd(c), c, appctx}
+}</span>
+
+// Do
+// @api | auth | 4 | 删除用户
+// @path | /api/auth/:id
+// @method | DELETE
+// @header         |n Authorization |d token |e tokenstring |c 鉴权 |t string
+// @tbtitle  | 200 Response
+// @tbrow    |n data |e ok |c 成功 |t type
+// @response | hd.ErrResponse | 500 RESPONSE
+// @tbtitle  | msg 数据
+// @tbrow    |n msg |e 该权限下包含其他权限，禁止删除！
+// @tbrow    |n msg |e 记录不存在
+func (this *AuthDel) Do() error <span class="cov8" title="1">{
+        var err error
+        id, err := this.GetId()
+        if err != nil </span><span class="cov0" title="0">{
+                return err
+        }</span>
+
+        <span class="cov8" title="1">if err := this.Delete(id); err != nil </span><span class="cov0" title="0">{
+                return err
+        }</span> else<span class="cov8" title="1"> {
+                this.appctx.AuthCheck.LoadPolicy()
+                this.RepOk()
+                return nil
+        }</span>
+}
+
+func (this *AuthDel) Delete(id int64) error <span class="cov8" title="1">{
+        db := this.appctx.Db
+        po := &amp;authmodel.AuthPo{}
+        po.ID = id
+        if r := db.Take(po); r.Error != nil </span><span class="cov0" title="0">{
+                if r.Error == gorm.ErrRecordNotFound </span><span class="cov0" title="0">{
+                        return errors.New("记录不存在")
+                }</span> else<span class="cov0" title="0"> {
+                        return r.Error
+                }</span>
+        }
+        <span class="cov8" title="1">ct := int64(0)
+        if r := db.Model(&amp;authmodel.AuthPo{}).Where("parent_id=?", id).Count(&amp;ct); r.Error != nil </span><span class="cov0" title="0">{
+                return r.Error
+        }</span>
+
+        <span class="cov8" title="1">if ct != 0 </span><span class="cov0" title="0">{
+                return errors.New("该权限下包含其他权限，禁止删除！")
+        }</span>
+
+        <span class="cov8" title="1">if r := db.Delete(po); r.Error != nil </span><span class="cov0" title="0">{
+                return r.Error
+        }</span>
+        <span class="cov8" title="1">return nil</span>
+}
+</pre>
+		
+		<pre class="file" id="file7" style="display: none">package api
+
+import (
+        "DEMOX_ADMINAUTH/internal/ctx"
+        "DEMOX_ADMINAUTH/internal/pkg/api/hd"
+        "DEMOX_ADMINAUTH/internal/pkg/fullurl"
+        "DEMOX_ADMINAUTH/internal/router/irouter"
+        "github.com/gin-gonic/gin"
+)
+
+/*
+获取全部url
+*/
+type GetFullUrl struct {
+        *hd.Hd
+        ctx    *gin.Context
+        appctx *ctx.AppContext
+}
+
+func NewGetFullUrl(c *gin.Context, appctx *ctx.AppContext) irouter.IHandler <span class="cov8" title="1">{
+        return &amp;GetFullUrl{hd.NewHd(c), c, appctx}
+}</span>
+
+// Do
+// @api         | auth | 5 | 获取所有URL | 创建修改权限时url参数从这获取
+// @path         | /api/auth
+// @method         | GET
+// @header         |n Authorization |d token |e tokenstring |c 鉴权 |t string
+// @tbtitle | 200 Response
+// @tbrow |n data |d 权限列表 |t []string |c 列表数据 |e ['/api/admin']
+func (this *GetFullUrl) Do() error <span class="cov8" title="1">{
+        this.Hd.Rep(hd.Response{fullurl.NewFullUrl().GetUrl()})
+        return nil
+}</span>
+</pre>
+		
+		<pre class="file" id="file8" style="display: none">package api
+
+import (
+        "DEMOX_ADMINAUTH/internal/app/auth/authmodel"
+        "DEMOX_ADMINAUTH/internal/ctx"
+        "DEMOX_ADMINAUTH/internal/pkg/api/hd"
+        "DEMOX_ADMINAUTH/internal/router/irouter"
+        "github.com/gin-gonic/gin"
+)
+
+type AuthQuery struct {
+        *hd.Hd
+        ctx    *gin.Context
+        appctx *ctx.AppContext
+}
+
+func NewAuthQuery(c *gin.Context, appctx *ctx.AppContext) irouter.IHandler <span class="cov8" title="1">{
+        return &amp;AuthQuery{hd.NewHd(c), c, appctx}
+}</span>
+
+// Do
+// @api         | auth | 3 | 权限查询
+// @path         | /api/auth
+// @method         | GET
+// @header         |n Authorization |d token |e tokenstring |c 鉴权 |t string
+// @query         |n kind |d 类型 |e 0 |t string |c 0:按钮 1:页面
+// @response | hd.Response | 200 Response
+// @response | authmodel.AuthVo | Data定义
+func (this *AuthQuery) Do() error <span class="cov8" title="1">{
+
+        data, err := this.Query()
+        if err != nil </span><span class="cov0" title="0">{
+                return err
+        }</span> else<span class="cov8" title="1"> {
+                this.Rep(hd.Response{data})
+                return nil
+        }</span>
+}
+
+var QueryRule = map[string]string{
+        "kind": "like",
+}
+
+func (this *AuthQuery) Query() (interface{}, error) <span class="cov8" title="1">{
+        po := &amp;authmodel.AuthVo{}
+        pos := []authmodel.AuthVo{}
+
+        kind := this.ctx.Query("kind")
+        if kind != "" </span><span class="cov8" title="1">{
+                if err := this.appctx.Db.Model(po).Where("parent_id=0 and kind= ?", kind).Preload("Children", "kind=?", kind).Order("order_num").Find(&amp;pos).Error; err != nil </span><span class="cov0" title="0">{
+                        return nil, err
+                }</span>
+        } else<span class="cov8" title="1"> {
+                if err := this.appctx.Db.Model(po).Where("parent_id=0").Preload("Children").Order("order_num").Find(&amp;pos).Error; err != nil </span><span class="cov0" title="0">{
+                        return nil, err
+                }</span>
+        }
+
+        <span class="cov8" title="1">return pos, nil</span>
+}
+</pre>
+		
+		<pre class="file" id="file9" style="display: none">package api
+
+import (
+        "DEMOX_ADMINAUTH/internal/app/auth/authmodel"
+        "DEMOX_ADMINAUTH/internal/ctx"
+        "DEMOX_ADMINAUTH/internal/pkg/api/hd"
+        "DEMOX_ADMINAUTH/internal/router/irouter"
+        "errors"
+        "github.com/gin-gonic/gin"
+        "gorm.io/gorm"
+)
+
+type AuthUpdate struct {
+        *hd.Hd
+        ctx    *gin.Context
+        appctx *ctx.AppContext
+}
+
+func NewAuthUpdate(c *gin.Context, appctx *ctx.AppContext) irouter.IHandler <span class="cov8" title="1">{
+        return &amp;AuthUpdate{hd.NewHd(c), c, appctx}
+}</span>
+
+// Do
+// @api         | auth | 2 | 修改权限
+// @path         | /api/auth/:id
+// @method         | PUT
+// @urlparam |n id |d 权限ID   |v required |t int    |e 1
+// @header   |n Authorization |d token  |t string |c 鉴权
+// @form     | authmodel.AuthUpdateForm
+// @tbtitle  | 200 Response
+// @tbrow    |n data |e ok |c 成功 |t string
+func (this *AuthUpdate) Do() error <span class="cov8" title="1">{
+        var err error
+        id, err := this.GetId()
+        if err != nil </span><span class="cov0" title="0">{
+                return err
+        }</span>
+        <span class="cov8" title="1">po := &amp;authmodel.AuthUpdateForm{}
+        err = this.Bind(po)
+        if err != nil </span><span class="cov0" title="0">{
+                return err
+        }</span>
+        <span class="cov8" title="1">po.ID = id
+        err = this.Update(po)
+        if err != nil </span><span class="cov0" title="0">{
+                return err
+        }</span>
+
+        <span class="cov8" title="1">this.appctx.AuthCheck.LoadPolicy()
+        this.RepOk()
+        return nil</span>
+}
+
+func (this *AuthUpdate) Update(po *authmodel.AuthUpdateForm) error <span class="cov8" title="1">{
+        db := this.appctx.Db
+        tmpPo := &amp;authmodel.AuthPo{}
+        tmpPo.ID = po.ID
+        if r := db.Model(tmpPo).Take(tmpPo); r.Error != nil </span><span class="cov0" title="0">{
+                if r.Error == gorm.ErrRecordNotFound </span><span class="cov0" title="0">{
+                        return errors.New("记录不存在")
+                }</span> else<span class="cov0" title="0"> {
+                        return r.Error
+                }</span>
+        }
+        //更新
+        <span class="cov8" title="1">if r := db.Updates(po); r.Error != nil </span><span class="cov0" title="0">{
+                return r.Error
+        }</span>
+        <span class="cov8" title="1">return nil</span>
+}
+</pre>
+		
+		<pre class="file" id="file10" style="display: none">package api
+
+import (
+        "DEMOX_ADMINAUTH/internal/app/my/mymodel"
+        "DEMOX_ADMINAUTH/internal/app/role/rolemodel"
+        "DEMOX_ADMINAUTH/internal/ctx"
+        "DEMOX_ADMINAUTH/internal/pkg/api/hd"
+        "DEMOX_ADMINAUTH/internal/pkg/jwtx"
+        "DEMOX_ADMINAUTH/internal/router/irouter"
+        "context"
+        "encoding/json"
+        "errors"
+        "github.com/gin-gonic/gin"
+        "github.com/go-redis/redis/v8"
+        "gorm.io/gorm"
+        "time"
+)
+
+//获取所有权限
+
+type MyAuth struct {
+        *hd.Hd
+        ctx    *gin.Context
+        appctx *ctx.AppContext
+}
+
+func NewMyAuth(c *gin.Context, appctx *ctx.AppContext) irouter.IHandler <span class="cov8" title="1">{
+        return &amp;MyAuth{hd.NewHd(c), c, appctx}
+}</span>
+
+// Do
+// @api | me | 7 | 获取权限
+// @path | /api/my-auth
+// @method | GET
+// @header |n Authorization |d token |t string |c 鉴权
+// @response | hd.Response | 200 Response
+// @tbtitle | 200 Response
+// @tbrow |n data |d 角色 |t []string |c 角色数组
+// @response | hd.ErrResponse | 400 Response
+// @tbtitle  | msg 数据
+// @tbrow |n msg |e 角色已被禁用
+// @tbrow |n msg |e 角色不存在
+func (this *MyAuth) Do() error <span class="cov8" title="1">{
+
+        roleCode, err := jwtx.GetRole(this.ctx)
+        if err != nil </span><span class="cov0" title="0">{
+                return err
+        }</span>
+        <span class="cov8" title="1">rolePo := &amp;rolemodel.RolePo{}
+        r, err := this.appctx.Redis.Get(context.Background(), mymodel.ROLE_STATUS+roleCode).Result()
+        if err == redis.Nil </span><span class="cov8" title="1">{
+                //不存在从数据库里捞数据
+
+                if r := this.appctx.Db.Model(rolePo).Where("code=?", roleCode).Take(rolePo); r.Error != nil </span><span class="cov8" title="1">{
+                        if r.Error == gorm.ErrRecordNotFound </span><span class="cov8" title="1">{
+                                return errors.New("角色不存在")
+                        }</span>
+                        <span class="cov0" title="0">return r.Error</span>
+                }
+                <span class="cov8" title="1">this.appctx.Redis.Set(context.Background(), mymodel.ROLE_STATUS+roleCode, rolePo.Status, time.Hour*24*7)
+                if rolePo.Status == "0" </span><span class="cov8" title="1">{
+                        this.ctx.JSON(401, map[string]string{"data": "角色已被禁用"})
+                        this.ctx.Abort()
+                        return nil
+                }</span>
+        } else<span class="cov8" title="1"> {
+                if r == "0" </span><span class="cov8" title="1">{
+                        this.ctx.JSON(401, map[string]string{"data": "角色已被禁用"})
+                        this.ctx.Abort()
+                        return nil
+                }</span>
+        }
+        <span class="cov8" title="1">authstring, err := this.appctx.Redis.Get(context.Background(), mymodel.ROLE_AUTH+roleCode).Result()
+        if err == redis.Nil </span><span class="cov8" title="1">{
+                if rolePo == nil </span><span class="cov0" title="0">{
+                        if r := this.appctx.Db.Model(rolePo).Where("code=?", roleCode).Take(rolePo); r.Error != nil </span><span class="cov0" title="0">{
+                                if r.Error == gorm.ErrRecordNotFound </span><span class="cov0" title="0">{
+                                        return errors.New("该角色不存在")
+                                }</span>
+                                <span class="cov0" title="0">return r.Error</span>
+                        }
+                }
+
+                <span class="cov8" title="1">authstr := ""
+                if r, err := json.Marshal(rolePo.Auth); err != nil </span><span class="cov0" title="0">{
+                        authstr = "[]"
+                }</span> else<span class="cov8" title="1"> {
+                        authstr = string(r)
+                }</span>
+                <span class="cov8" title="1">this.appctx.Redis.Set(context.Background(), mymodel.ROLE_AUTH+roleCode, authstr, time.Hour*24*7)
+                hd.Rep(this.ctx, hd.Response{rolePo.Auth})
+                return nil</span>
+        }
+        <span class="cov8" title="1">rd := []string{}
+        if err := json.Unmarshal([]byte(authstring), &amp;rd); err != nil </span><span class="cov0" title="0">{
+                return err
+        }</span>
+        <span class="cov8" title="1">hd.Rep(this.ctx, hd.Response{rd})
+
+        return nil</span>
+}
+</pre>
+		
+		<pre class="file" id="file11" style="display: none">package api
+
+import (
+        "DEMOX_ADMINAUTH/internal/app/my/mymodel"
+        "DEMOX_ADMINAUTH/internal/ctx"
+        "DEMOX_ADMINAUTH/internal/pkg/api/hd"
+        "DEMOX_ADMINAUTH/internal/pkg/jwtx"
+        "DEMOX_ADMINAUTH/internal/router/irouter"
+        "errors"
+        "github.com/gin-gonic/gin"
+        "gorm.io/gorm"
+)
+
+/*
+获取我的信息
+*/
+type MyInfo struct {
+        *hd.Hd
+        ctx    *gin.Context
+        appctx *ctx.AppContext
+}
+
+func NewMyInfo(c *gin.Context, appctx *ctx.AppContext) irouter.IHandler <span class="cov8" title="1">{
+        return &amp;MyInfo{hd.NewHd(c), c, appctx}
+}</span>
+
+// Do
+// @api | me | 3 | 我的详情
+// @path | /api/my
+// @method | GET
+// @header |n Authorization |d token |t string |c 鉴权
+// @response | mymodel.MyInfo | 200 Response
+func (this *MyInfo) Do() error <span class="cov8" title="1">{
+
+        uid, err := jwtx.GetUid(this.ctx)
+        if err != nil </span><span class="cov0" title="0">{
+                return err
+        }</span>
+
+        <span class="cov8" title="1">po := &amp;mymodel.MyInfo{}
+        if r := this.appctx.Db.Model(po).Where("id = ?", uid).Take(po); r.Error != nil </span><span class="cov0" title="0">{
+                if r.Error == gorm.ErrRecordNotFound </span><span class="cov0" title="0">{
+                        return errors.New("记录不存在")
+                }</span> else<span class="cov0" title="0"> {
+                        return r.Error
+                }</span>
+        }
+        <span class="cov8" title="1">this.Rep(po)
+        return nil</span>
+}
+</pre>
+		
+		<pre class="file" id="file12" style="display: none">package api
+
+import (
+        "DEMOX_ADMINAUTH/internal/app/admin/adminmodel"
+        "DEMOX_ADMINAUTH/internal/app/my/mymodel"
+        "DEMOX_ADMINAUTH/internal/ctx"
+        "DEMOX_ADMINAUTH/internal/pkg"
+        "DEMOX_ADMINAUTH/internal/pkg/api/hd"
+        "DEMOX_ADMINAUTH/internal/pkg/jwtx"
+        "DEMOX_ADMINAUTH/internal/router/irouter"
+        "context"
+        "errors"
+        "github.com/gin-gonic/gin"
+        "github.com/google/uuid"
+        "gorm.io/gorm"
+        "strings"
+        "time"
+)
+
+type Login struct {
+        *hd.Hd
+        ctx    *gin.Context
+        appctx *ctx.AppContext
+}
+
+func NewLogin(c *gin.Context, appctx *ctx.AppContext) irouter.IHandler <span class="cov8" title="1">{
+        return &amp;Login{hd.NewHd(c), c, appctx}
+}</span>
+
+// Do
+// @api     | me | 1 | 登录
+// @path         | /api/login
+// @method         | POST
+// @form     | mymodel.LoginForm
+// @response | mymodel.LogRep |200 Response
+// @response | hd.ErrResponse | 400 Response
+// @tbtitle | Msg 数据
+// @tbrow   |n msg |d 密码错误
+// @tbrow   |n msg |d 账号不存在
+// @tbrow   |n msg |d 账号被禁用
+func (this *Login) Do() error <span class="cov8" title="1">{
+
+        //数据源
+        po := &amp;mymodel.LoginForm{}
+        err := this.Bind(po)
+        if err != nil </span><span class="cov0" title="0">{
+                return err
+        }</span>
+
+        <span class="cov8" title="1">data, err := this.Login(po)
+        if err != nil </span><span class="cov8" title="1">{
+                return err
+        }</span>
+        <span class="cov8" title="1">this.Rep(data)
+        return nil</span>
+}
+func (this *Login) Login(form *mymodel.LoginForm) (interface{}, error) <span class="cov8" title="1">{
+        po, err := this.Valid(form)
+        if err != nil </span><span class="cov8" title="1">{
+                return nil, err
+        }</span>
+
+        <span class="cov8" title="1">pwd := pkg.GetPassword(form.Password)
+        if pwd != po.Password </span><span class="cov0" title="0">{
+                return nil, errors.New("密码错误")
+        }</span>
+
+        //同时只能有一个jwt登陆，可拓展踢人功能
+        <span class="cov8" title="1">logincode, err := this.newLoginCode(po.ID)
+        if err != nil </span><span class="cov0" title="0">{
+                return nil, err
+        }</span>
+
+        <span class="cov8" title="1">now := time.Now().Unix()
+        if token, err := jwtx.GenToken(
+                this.appctx.Config.Jwt.Secret,
+                now+this.appctx.Config.Jwt.Exp,
+                now+this.appctx.Config.Jwt.Exp/2,
+                po.ID,
+                logincode,
+                po.Role,
+                po.IsSuperAdmin,
+        ); err != nil </span><span class="cov0" title="0">{
+                return nil, this.ErrMsg("登陆失败", "jwt:"+err.Error())
+        }</span> else<span class="cov8" title="1"> {
+
+                refleshToken, err := this.newRefreshToken(po.ID)
+                if err != nil </span><span class="cov0" title="0">{
+                        return nil, err
+                }</span>
+                <span class="cov8" title="1">return mymodel.LogRep{
+                        token,
+                        now + this.appctx.Config.Jwt.Exp/2,
+                        refleshToken,
+                }, nil</span>
+
+        }
+}
+
+func (this *Login) Valid(form *mymodel.LoginForm) (*adminmodel.AdminPo, error) <span class="cov8" title="1">{
+        po := &amp;adminmodel.AdminPo{}
+        if r := this.appctx.Db.Model(po).Where("account=?", form.Account).Take(po); r.Error != nil </span><span class="cov0" title="0">{
+                if r.Error == gorm.ErrRecordNotFound </span><span class="cov0" title="0">{
+                        return po, errors.New("账号不存在")
+                }</span> else<span class="cov0" title="0"> {
+                        return po, r.Error
+                }</span>
+        }
+
+        <span class="cov8" title="1">if pkg.GetPassword(form.Password) != po.Password </span><span class="cov8" title="1">{
+                return nil, errors.New("密码错误")
+        }</span>
+
+        <span class="cov8" title="1">if po.Status == "0" </span><span class="cov0" title="0">{
+                return nil, errors.New("账号被禁用")
+        }</span>
+
+        <span class="cov8" title="1">return po, nil</span>
+}
+
+func (this *Login) newLoginCode(id int64) (string, error) <span class="cov8" title="1">{
+        //登陆处理
+        //登陆code 控制唯一登陆有效及踢人
+        var logincode string
+        if logincode = uuid.New().String(); logincode == "" </span><span class="cov0" title="0">{
+                return "", this.ErrMsg("logincode is empty", "登陆失败")
+        }</span> else<span class="cov8" title="1"> {
+                logincode = strings.Split(logincode, "-")[0]
+                if r := this.appctx.Redis.Set(context.Background(), mymodel.GetAdminRedisLoginId(this.appctx.Config.App.Name, int(id)), logincode, 0); r.Err() != nil </span><span class="cov0" title="0">{
+                        return "", this.ErrMsg("redis:"+r.Err().Error(), "登陆失败")
+                }</span>
+        }
+        <span class="cov8" title="1">return logincode, nil</span>
+}
+
+// 刷新token生成
+func (this *Login) newRefreshToken(id int64) (string, error) <span class="cov8" title="1">{
+        var refreshToken string
+        if refreshToken = uuid.New().String(); refreshToken == "" </span><span class="cov0" title="0">{
+                return "", this.ErrMsg("登陆失败", "refreshToken is empty")
+        }</span> else<span class="cov8" title="1"> {
+                if r := this.appctx.Redis.Set(context.Background(), mymodel.GetAdminRedisRefreshTokenId(this.appctx.Config.App.Name, int(id)), refreshToken, time.Second*time.Duration(this.appctx.Config.Jwt.Exp)); r.Err() != nil </span><span class="cov0" title="0">{
+                        return "", this.ErrMsg("redis:"+r.Err().Error(), "登陆失败")
+                }</span> else<span class="cov8" title="1"> {
+                        return refreshToken, nil
+                }</span>
+        }
+}
+</pre>
+		
+		<pre class="file" id="file13" style="display: none">package api
+
+import (
+        "DEMOX_ADMINAUTH/internal/app/my/mymodel"
+        "DEMOX_ADMINAUTH/internal/ctx"
+        "DEMOX_ADMINAUTH/internal/pkg/api/hd"
+        "DEMOX_ADMINAUTH/internal/pkg/jwtx"
+        "DEMOX_ADMINAUTH/internal/router/irouter"
+        "context"
+        "github.com/gin-gonic/gin"
+)
+
+/*
+退出登陆
+*/
+type LogOut struct {
+        *hd.Hd
+        ctx    *gin.Context
+        appctx *ctx.AppContext
+}
+
+func NewLogOut(c *gin.Context, appctx *ctx.AppContext) irouter.IHandler <span class="cov8" title="1">{
+        return &amp;LogOut{hd.NewHd(c), c, appctx}
+}</span>
+
+// Do
+// @api     | me | 2 | 登出
+// @path         | /api/logout
+// @method         | POST
+// @header  |n Authorization |d token |t string |c 鉴权
+// @tbtitle | 200 Response
+// @tbrow   |n data |e ok |c 成功 |t string
+func (this *LogOut) Do() error <span class="cov8" title="1">{
+        this.Logout()
+        this.Hd.RepOk()
+        return nil
+}</span>
+
+func (this *LogOut) Logout() error <span class="cov8" title="1">{
+        //获取id
+        id, err := jwtx.GetUid(this.ctx)
+        if err != nil </span><span class="cov0" title="0">{
+                return nil
+        }</span>
+        //删除logincode
+        <span class="cov8" title="1">this.appctx.Redis.Del(context.Background(), mymodel.GetAdminRedisLoginId(this.appctx.Config.App.Name, int(id)))
+
+        //删除刷新token
+        this.appctx.Redis.Del(context.Background(), mymodel.GetAdminRedisRefreshTokenId(this.appctx.Config.App.Name, int(id)))
+        return nil</span>
+}
+</pre>
+		
+		<pre class="file" id="file14" style="display: none">package api
+
+/*
+token刷新
+*/
+import (
+        "DEMOX_ADMINAUTH/internal/app/my/mymodel"
+        "DEMOX_ADMINAUTH/internal/ctx"
+        "DEMOX_ADMINAUTH/internal/pkg/api/hd"
+        "DEMOX_ADMINAUTH/internal/pkg/jwtx"
+        "DEMOX_ADMINAUTH/internal/router/irouter"
+        "context"
+        "github.com/gin-gonic/gin"
+        "github.com/google/uuid"
+        "time"
+)
+
+type RefreshToken struct {
+        *hd.Hd
+        ctx    *gin.Context
+        appctx *ctx.AppContext
+}
+
+func NewRefreshToken(c *gin.Context, appctx *ctx.AppContext) irouter.IHandler <span class="cov8" title="1">{
+        return &amp;RefreshToken{hd.NewHd(c), c, appctx}
+}</span>
+
+// Do
+// @api     | me | 6 | 刷新token
+// @path         | /api/token/refresh
+// @method         | POST
+// @header   |n Authorization |d token  |t string |c 鉴权
+// @form     | mymodel.RefreshTokeForm
+// @response | mymodel.LogRep |200 Response
+// @response | hd.ErrResponse | 401 Response
+// @tbtitle | Msg 数据
+// @tbrow   |n msg |d refreshtoken已失效
+func (this *RefreshToken) Do() error <span class="cov8" title="1">{
+
+        form := &amp;mymodel.RefreshTokeForm{}
+        if err := this.Bind(form); err != nil </span><span class="cov0" title="0">{
+                return err
+        }</span>
+
+        <span class="cov8" title="1">uid, err := jwtx.GetUid(this.ctx)
+        if err != nil </span><span class="cov0" title="0">{
+                return err
+        }</span>
+
+        //刷新token检验
+        <span class="cov8" title="1">r, err := this.appctx.Redis.Get(context.Background(), mymodel.GetAdminRedisRefreshTokenId(this.appctx.Config.App.Name, int(uid))).Result()
+        if err != nil </span><span class="cov0" title="0">{
+                return err
+        }</span>
+
+        <span class="cov8" title="1">if r != form.RefreshToken </span><span class="cov0" title="0">{
+                this.ctx.JSON(401, hd.ErrMsg("refreshtoken已失效", ""))
+                return nil
+        }</span>
+        //数据源
+        <span class="cov8" title="1">data, err := this.RefreshToken(uid)
+        if err != nil </span><span class="cov0" title="0">{
+                return err
+        }</span>
+
+        <span class="cov8" title="1">this.Rep(data)
+        return nil</span>
+}
+
+func (this *RefreshToken) RefreshToken(uid int64) (interface{}, error) <span class="cov8" title="1">{
+        // logincode, err := this.newCode(uid)
+
+        logincode, err := jwtx.GetCode(this.ctx)
+        if err != nil </span><span class="cov0" title="0">{
+                return nil, err
+        }</span>
+
+        <span class="cov8" title="1">now := time.Now().Unix()
+        role, _ := jwtx.GetRole(this.ctx)
+        issuper, _ := jwtx.GetIsSuper(this.ctx)
+        _issuper := ""
+        if issuper </span><span class="cov8" title="1">{
+                _issuper = "1"
+        }</span> else<span class="cov0" title="0"> {
+                _issuper = "0"
+        }</span>
+        <span class="cov8" title="1">if token, err := jwtx.GenToken(
+                this.appctx.Config.Jwt.Secret,
+                now+this.appctx.Config.Jwt.Exp,
+                now+this.appctx.Config.Jwt.Exp/2,
+                uid,
+                logincode,
+                role,
+                _issuper,
+        ); err != nil </span><span class="cov0" title="0">{
+                return nil, this.ErrMsg("刷新失败", "jwt:"+err.Error())
+        }</span> else<span class="cov8" title="1"> {
+                // this.ctx.Header("Authorization", token)
+                newRefreshToken, err := this.newRefreshToken(uid)
+                if err != nil </span><span class="cov0" title="0">{
+                        return "", err
+                }</span>
+                <span class="cov8" title="1">return mymodel.LogRep{
+                        token,
+                        now + this.appctx.Config.Jwt.Exp/2,
+                        newRefreshToken,
+                }, nil</span>
+        }
+}
+
+// 刷新token生成
+func (this *RefreshToken) newRefreshToken(id int64) (string, error) <span class="cov8" title="1">{
+        var refreshToken string
+        if refreshToken = uuid.New().String(); refreshToken == "" </span><span class="cov0" title="0">{
+                return "", this.ErrMsg("刷新失败", "refreshToken is empty")
+        }</span> else<span class="cov8" title="1"> {
+                if r := this.appctx.Redis.Set(context.Background(), mymodel.GetAdminRedisRefreshTokenId(this.appctx.Config.App.Name, int(id)), refreshToken, time.Second*time.Duration(this.appctx.Config.Jwt.Exp)); r.Err() != nil </span><span class="cov0" title="0">{
+                        return "", this.ErrMsg("刷新失败", "redis:"+r.Err().Error())
+                }</span> else<span class="cov8" title="1"> {
+                        return refreshToken, nil
+                }</span>
+        }
+}
+</pre>
+		
+		<pre class="file" id="file15" style="display: none">package api
+
+import (
+        "DEMOX_ADMINAUTH/internal/app/my/mymodel"
+        "DEMOX_ADMINAUTH/internal/ctx"
+        "DEMOX_ADMINAUTH/internal/pkg/api/hd"
+        "DEMOX_ADMINAUTH/internal/pkg/jwtx"
+        "DEMOX_ADMINAUTH/internal/router/irouter"
+        "errors"
+        "github.com/gin-gonic/gin"
+        errs "github.com/pkg/errors"
+        "gorm.io/gorm"
+)
+
+/*
+修改我的信息
+*/
+
+type MyUpdate struct {
+        *hd.Hd
+        ctx    *gin.Context
+        appctx *ctx.AppContext
+}
+
+func NewMyUpdate(c *gin.Context, appctx *ctx.AppContext) irouter.IHandler <span class="cov8" title="1">{
+        return &amp;MyUpdate{hd.NewHd(c), c, appctx}
+}</span>
+
+// Do
+// @api     | me | 4 | 修改我的信息
+// @path         | /api/my
+// @method         | PUT
+// @header   |n Authorization |d token  |t string |c 鉴权
+// @form     | mymodel.MyForm
+// @tbtitle  | 200 Response
+// @tbrow    |n data |e ok |c 成功 |t string
+func (this *MyUpdate) Do() error <span class="cov8" title="1">{
+        var err error
+        uid, err := jwtx.GetUid(this.ctx)
+
+        po := &amp;mymodel.MyForm{}
+
+        err = this.Bind(po)
+        if err != nil </span><span class="cov0" title="0">{
+                return err
+        }</span>
+        <span class="cov8" title="1">po.ID = uid
+        err = this.Update(po)
+        if err != nil </span><span class="cov0" title="0">{
+                return err
+        }</span>
+        <span class="cov8" title="1">this.RepOk()
+        return nil</span>
+}
+
+func (this *MyUpdate) Update(rawpo *mymodel.MyForm) error <span class="cov8" title="1">{
+        po := &amp;mymodel.MyForm{}
+        //校验
+        if r := this.appctx.Db.Model(po).Where("id=?", rawpo.ID).Take(po); r.Error != nil </span><span class="cov0" title="0">{
+                if r.Error == gorm.ErrRecordNotFound </span><span class="cov0" title="0">{
+                        return errors.New("记录不存在")
+                }</span> else<span class="cov0" title="0"> {
+                        return r.Error
+                }</span>
+        }
+        /*
+                if err := this.valid(rawpo); err != nil {
+                        return err
+                }
+        */
+        //更新
+        <span class="cov8" title="1">if r := this.appctx.Db.Model(rawpo).Select("phone", "name", "memo", "email").Updates(rawpo); r.Error != nil </span><span class="cov0" title="0">{
+                return r.Error
+        }</span>
+        <span class="cov8" title="1">return nil</span>
+
+}
+
+func (this *MyUpdate) valid(po *mymodel.MyForm) error <span class="cov0" title="0">{
+        var ct = int64(0)
+
+        if po.Phone != "" </span><span class="cov0" title="0">{
+                if r := this.appctx.Db.Model(po).Where("account = ?", po.Phone).Count(&amp;ct); r.Error != nil </span><span class="cov0" title="0">{
+                        return errs.WithMessage(r.Error, "校验失败")
+                }</span> else<span class="cov0" title="0"> if ct != 0 </span><span class="cov0" title="0">{
+                        return errors.New("手机号已存在")
+                }</span>
+        }
+
+        <span class="cov0" title="0">if po.Email != "" </span><span class="cov0" title="0">{
+                if r := this.appctx.Db.Model(po).Where("email = ?", po.Email).Count(&amp;ct); r.Error != nil </span><span class="cov0" title="0">{
+                        return errs.WithMessage(r.Error, "校验失败")
+                }</span> else<span class="cov0" title="0"> if ct != 0 </span><span class="cov0" title="0">{
+                        return errors.New("Email已存在")
+                }</span>
+        }
+        <span class="cov0" title="0">return nil</span>
+}
+</pre>
+		
+		<pre class="file" id="file16" style="display: none">package api
+
+import (
+        "DEMOX_ADMINAUTH/internal/app/admin/adminmodel"
+        "DEMOX_ADMINAUTH/internal/app/my/mymodel"
+        "DEMOX_ADMINAUTH/internal/ctx"
+        "DEMOX_ADMINAUTH/internal/pkg"
+        "DEMOX_ADMINAUTH/internal/pkg/api/hd"
+        "DEMOX_ADMINAUTH/internal/pkg/jwtx"
+        "DEMOX_ADMINAUTH/internal/router/irouter"
+        "context"
+        "errors"
+        "github.com/gin-gonic/gin"
+)
+
+/*
+修改我的密码
+*/
+
+type UpdatePwd struct {
+        *hd.Hd
+        ctx    *gin.Context
+        appctx *ctx.AppContext
+}
+
+func NewMyUpdatePwd(c *gin.Context, appctx *ctx.AppContext) irouter.IHandler <span class="cov8" title="1">{
+        return &amp;UpdatePwd{hd.NewHd(c), c, appctx}
+}</span>
+
+// Do
+// @api     | me | 5 | 修改密码
+// @path         | /api/admin/my/password
+// @method         | PUT
+// @header   |n Authorization |d token  |t string |c 鉴权
+// @form     | mymodel.PasswordForm
+// @tbtitle  | 200 Response
+// @tbrow    |n data |e ok |c 成功 |t string
+func (this *UpdatePwd) Do() error <span class="cov8" title="1">{
+        var err error
+        uid, err := jwtx.GetUid(this.ctx)
+
+        po := &amp;mymodel.PasswordForm{}
+
+        err = this.Bind(po)
+        if err != nil </span><span class="cov0" title="0">{
+                return err
+        }</span>
+        <span class="cov8" title="1">err = this.UpdatePwd(po, uid)
+        if err != nil </span><span class="cov0" title="0">{
+                return err
+        }</span>
+        <span class="cov8" title="1">this.RepOk()
+        return nil</span>
+}
+
+func (this *UpdatePwd) UpdatePwd(form *mymodel.PasswordForm, id int64) error <span class="cov8" title="1">{
+        po := &amp;adminmodel.AdminPo{}
+        if r := this.appctx.Db.Model(po).Where("id=?", id).Take(po); r.Error != nil </span><span class="cov0" title="0">{
+                return r.Error
+        }</span>
+
+        //校验旧密码是否正确
+        <span class="cov8" title="1">if pkg.GetPassword(form.Password) != po.Password </span><span class="cov0" title="0">{
+                return errors.New("原密码错误")
+        }</span>
+        <span class="cov8" title="1">po.Password = pkg.GetPassword(form.NewPassword)
+        r := this.appctx.Db.Model(po).Select("password").Updates(po)
+
+        this.appctx.Redis.Del(context.Background(), mymodel.GetAdminRedisLoginId(this.appctx.Config.App.Name, int(po.ID)))
+        return r.Error</span>
+}
+</pre>
+		
+		<pre class="file" id="file17" style="display: none">package api
+
+import (
+        "DEMOX_ADMINAUTH/internal/app/role/rolemodel"
+        "DEMOX_ADMINAUTH/internal/ctx"
+        "DEMOX_ADMINAUTH/internal/pkg/api/hd"
+        "DEMOX_ADMINAUTH/internal/router/irouter"
+        "errors"
+        "github.com/gin-gonic/gin"
+)
+
+type RoleCreate struct {
+        *hd.Hd
+        ctx    *gin.Context
+        appctx *ctx.AppContext
+}
+
+func NewRoleCreate(c *gin.Context, appctx *ctx.AppContext) irouter.IHandler <span class="cov8" title="1">{
+        return &amp;RoleCreate{hd.NewHd(c), c, appctx}
+}</span>
+
+// Do
+// @api | role | 1 | 创建角色
+// @path    | /api/role
+// @method  | POST
+// @header  |n Authorization |d token |t string |c 鉴权
+// @form    | rolemodel.RoleForm
+// @tbtitle  | 200 Response
+// @tbrow    |n data |e ok |c 成功 |t string
+func (this *RoleCreate) Do() error <span class="cov8" title="1">{
+        //数据源
+        po := &amp;rolemodel.RoleForm{}
+        err := this.Bind(po)
+        if err != nil </span><span class="cov0" title="0">{
+                return err
+        }</span>
+
+        <span class="cov8" title="1">err = this.Create(po)
+        if err != nil </span><span class="cov8" title="1">{
+                return err
+        }</span>
+        <span class="cov8" title="1">this.RepOk()
+        return nil</span>
+}
+
+func (this *RoleCreate) Create(po *rolemodel.RoleForm) error <span class="cov8" title="1">{
+        db := this.appctx.Db
+        //验证是否已创建 或者其他检查
+        tmpPo := &amp;rolemodel.RolePo{}
+        if r := db.Model(tmpPo).Where("code = ?", po.Code).Take(tmpPo); r.Error == nil </span><span class="cov8" title="1">{
+                return errors.New("角色编码已存在")
+        }</span>
+
+        <span class="cov8" title="1">if r := db.Create(po); r.Error != nil </span><span class="cov0" title="0">{
+                return r.Error
+        }</span>
+        <span class="cov8" title="1">return nil</span>
+}
+</pre>
+		
+		<pre class="file" id="file18" style="display: none">package api
+
+import (
+        "DEMOX_ADMINAUTH/internal/app/role/rolemodel"
+        "DEMOX_ADMINAUTH/internal/ctx"
+        "DEMOX_ADMINAUTH/internal/pkg/api/hd"
+        "DEMOX_ADMINAUTH/internal/router/irouter"
+        "errors"
+        "github.com/gin-gonic/gin"
+        "gorm.io/gorm"
+)
+
+type RoleDel struct {
+        *hd.Hd
+        ctx    *gin.Context
+        appctx *ctx.AppContext
+}
+
+func NewRoleDel(c *gin.Context, appctx *ctx.AppContext) irouter.IHandler <span class="cov8" title="1">{
+        return &amp;RoleDel{hd.NewHd(c), c, appctx}
+}</span>
+
+// Do
+// @api         | admin | 6 | 删除用户
+// @path         | /api/role/:id
+// @method         | DELETE
+// @header         |n Authorization |d token |e tokenstring |c 鉴权 |t string
+// @tbtitle  | 200 Response
+// @tbrow    |n data |e ok |c 成功 |t type
+// @response | hd.ErrResponse | 500 RESPONSE
+// @tbtitle  | msg 数据
+// @tbrow    |n msg |e 记录不存在
+func (this *RoleDel) Do() error <span class="cov8" title="1">{
+        var err error
+        id, err := this.GetId()
+        if err != nil </span><span class="cov0" title="0">{
+                return err
+        }</span>
+        <span class="cov8" title="1">if err := this.Delete(id); err != nil </span><span class="cov0" title="0">{
+                return err
+        }</span> else<span class="cov8" title="1"> {
+                this.RepOk()
+                return nil
+        }</span>
+}
+
+func (this *RoleDel) Delete(id int64) error <span class="cov8" title="1">{
+        db := this.appctx.Db
+        po := &amp;rolemodel.RolePo{}
+        po.ID = id
+        if r := db.Take(po); r.Error != nil </span><span class="cov0" title="0">{
+                if r.Error == gorm.ErrRecordNotFound </span><span class="cov0" title="0">{
+                        return errors.New("记录不存在")
+                }</span> else<span class="cov0" title="0"> {
+                        return r.Error
+                }</span>
+        }
+        <span class="cov8" title="1">if r := db.Delete(po); r.Error != nil </span><span class="cov0" title="0">{
+                return r.Error
+        }</span>
+
+        <span class="cov8" title="1">this.appctx.AuthCheck.LoadPolicy()
+        return nil</span>
+}
+</pre>
+		
+		<pre class="file" id="file19" style="display: none">package api
+
+import (
+        "DEMOX_ADMINAUTH/internal/app/role/rolemodel"
+        "DEMOX_ADMINAUTH/internal/ctx"
+        "DEMOX_ADMINAUTH/internal/pkg/api/hd"
+        "DEMOX_ADMINAUTH/internal/pkg/api/query"
+        "DEMOX_ADMINAUTH/internal/router/irouter"
+        "github.com/gin-gonic/gin"
+        "gorm.io/gorm"
+)
+
+type RoleQuery struct {
+        *hd.Hd
+        ctx    *gin.Context
+        appctx *ctx.AppContext
+}
+
+func NewRoleQuery(c *gin.Context, appctx *ctx.AppContext) irouter.IHandler <span class="cov8" title="1">{
+        return &amp;RoleQuery{hd.NewHd(c), c, appctx}
+}</span>
+
+// Do
+// @api         | role | 4 | 角色查询
+// @path         | /api/role
+// @method         | GET
+// @header         |n Authorization |d token |e tokenstring |c 鉴权 |t string
+// @query   |n limit   |d 条数 |e 10 |t int
+// @query   |n current |d 页码 |e 1  |t int
+// @query         |n code |d 角色编码 |t string
+// @query   |n name |d 角色名称
+// @response | query.QueryResult | 200 Response
+// @response | query.Page | Page定义
+// @response | rolemodel.RolePo | []Data 定义
+func (this *RoleQuery) Do() error <span class="cov8" title="1">{
+
+        data, err := this.Query()
+        if err != nil </span><span class="cov0" title="0">{
+                return err
+        }</span> else<span class="cov8" title="1"> {
+                this.Rep(data)
+                return nil
+        }</span>
+}
+
+var QueryRule = map[string]string{
+        "code": "like",
+        "name": "like",
+}
+
+func (this *RoleQuery) Query() (interface{}, error) <span class="cov8" title="1">{
+        po := &amp;rolemodel.RolePo{}
+        pos := []rolemodel.RolePo{}
+        q := query.NewQuery(this.ctx, this.appctx.Db, QueryRule, po, &amp;pos)
+        q.SetOrder(func(db *gorm.DB) (r *gorm.DB) </span><span class="cov8" title="1">{
+                db = db.Order("order_num")
+                return db
+        }</span>)
+        <span class="cov8" title="1">return q.Do()</span>
+}
+</pre>
+		
+		<pre class="file" id="file20" style="display: none">package api
+
+import (
+        "DEMOX_ADMINAUTH/internal/app/my/mymodel"
+        "DEMOX_ADMINAUTH/internal/app/role/rolemodel"
+        "DEMOX_ADMINAUTH/internal/ctx"
+        "DEMOX_ADMINAUTH/internal/pkg/api/hd"
+        "DEMOX_ADMINAUTH/internal/router/irouter"
+        "context"
+        "errors"
+        "github.com/gin-gonic/gin"
+        "gorm.io/gorm"
+)
+
+type SetAuth struct {
+        *hd.Hd
+        ctx    *gin.Context
+        appctx *ctx.AppContext
+}
+
+func NewSetAuth(c *gin.Context, appctx *ctx.AppContext) irouter.IHandler <span class="cov8" title="1">{
+        return &amp;SetAuth{hd.NewHd(c), c, appctx}
+}</span>
+
+// Do
+// @api         | role | 3 | 修改角色
+// @path         | /role/auth/:id
+// @method         | PUT
+// @urlparam |n id |d 角色ID   |v required |t int    |e 1
+// @header   |n Authorization |d token  |t string |c 鉴权
+// @form     | rolemodel.RoleAuthForm
+// @tbtitle  | 200 Response
+// @tbrow    |n data |e ok |c 成功 |t string
+func (this *SetAuth) Do() error <span class="cov8" title="1">{
+        var err error
+        id, err := this.GetId()
+        if err != nil </span><span class="cov0" title="0">{
+                return err
+        }</span>
+
+        <span class="cov8" title="1">po := &amp;rolemodel.RoleAuthForm{}
+        err = this.Bind(po)
+        if err != nil </span><span class="cov0" title="0">{
+                return err
+        }</span>
+        <span class="cov8" title="1">po.ID = id
+        if err := this.Update(po); err != nil </span><span class="cov0" title="0">{
+                return err
+        }</span>
+        <span class="cov8" title="1">this.RepOk()
+        return nil</span>
+}
+
+func (this *SetAuth) Update(po *rolemodel.RoleAuthForm) error <span class="cov8" title="1">{
+        db := this.appctx.Db
+        tmpPo := &amp;rolemodel.RolePo{}
+        if r := db.Model(tmpPo).Take(tmpPo); r.Error != nil </span><span class="cov0" title="0">{
+                if r.Error == gorm.ErrRecordNotFound </span><span class="cov0" title="0">{
+                        return errors.New("记录不存在")
+                }</span> else<span class="cov0" title="0"> {
+                        return r.Error
+                }</span>
+        }
+        //校验是否存在
+
+        //更新
+        <span class="cov8" title="1">if r := db.Updates(po); r.Error != nil </span><span class="cov0" title="0">{
+                return r.Error
+        }</span>
+        //删除
+        <span class="cov8" title="1">this.appctx.Redis.Del(context.Background(), mymodel.ROLE_AUTH+tmpPo.Code)
+        this.appctx.AuthCheck.LoadPolicy()
+        return nil</span>
+}
+</pre>
+		
+		<pre class="file" id="file21" style="display: none">package api
+
+import (
+        "DEMOX_ADMINAUTH/internal/app/my/mymodel"
+        "DEMOX_ADMINAUTH/internal/app/role/rolemodel"
+        "DEMOX_ADMINAUTH/internal/ctx"
+        "DEMOX_ADMINAUTH/internal/pkg/api/hd"
+        "DEMOX_ADMINAUTH/internal/router/irouter"
+        "context"
+        "errors"
+        "github.com/gin-gonic/gin"
+        "gorm.io/gorm"
+)
+
+type RoleUpdate struct {
+        *hd.Hd
+        ctx    *gin.Context
+        appctx *ctx.AppContext
+}
+
+func NewRoleUpdate(c *gin.Context, appctx *ctx.AppContext) irouter.IHandler <span class="cov8" title="1">{
+        return &amp;RoleUpdate{hd.NewHd(c), c, appctx}
+}</span>
+
+// Do
+// @api         | role | 2 | 修改角色
+// @path         | /api/role/:id
+// @method         | PUT
+// @urlparam |n id |d 角色ID   |v required |t int    |e 1
+// @header   |n Authorization |d token  |t string |c 鉴权
+// @form     | rolemodel.RoleUpdate
+// @tbtitle  | 200 Response
+// @tbrow    |n data |e ok |c 成功 |t string
+func (this *RoleUpdate) Do() error <span class="cov8" title="1">{
+        var err error
+        id, err := this.GetId()
+        if err != nil </span><span class="cov0" title="0">{
+                return err
+        }</span>
+        <span class="cov8" title="1">po := &amp;rolemodel.RoleUpdate{}
+        err = this.Bind(po)
+        if err != nil </span><span class="cov0" title="0">{
+                return err
+        }</span>
+        <span class="cov8" title="1">po.ID = id
+        err = this.Update(po)
+        if err != nil </span><span class="cov0" title="0">{
+                return err
+        }</span>
+        <span class="cov8" title="1">this.RepOk()
+        return nil</span>
+}
+
+func (this *RoleUpdate) Update(po *rolemodel.RoleUpdate) error <span class="cov8" title="1">{
+        db := this.appctx.Db
+        tmpPo := &amp;rolemodel.RolePo{}
+        if r := db.Model(tmpPo).Take(tmpPo); r.Error != nil </span><span class="cov0" title="0">{
+                if r.Error == gorm.ErrRecordNotFound </span><span class="cov0" title="0">{
+                        return errors.New("记录不存在")
+                }</span> else<span class="cov0" title="0"> {
+                        return r.Error
+                }</span>
+        }
+
+        //更新
+        <span class="cov8" title="1">if r := db.Updates(po); r.Error != nil </span><span class="cov0" title="0">{
+                return r.Error
+        }</span>
+
+        <span class="cov8" title="1">if tmpPo.Status != po.Status </span><span class="cov8" title="1">{
+                this.appctx.AuthCheck.LoadPolicy()
+                //删除缓存状态
+                this.appctx.Redis.Del(context.Background(), mymodel.ROLE_STATUS+tmpPo.Code)
+        }</span>
+
+        <span class="cov8" title="1">return nil</span>
+}
+</pre>
+		
+		<pre class="file" id="file22" style="display: none">package api
+
+import (
+        "DEMOX_ADMINAUTH/internal/app/sys/sysmodel"
+        "DEMOX_ADMINAUTH/internal/ctx"
+        "DEMOX_ADMINAUTH/internal/pkg/api/hd"
+        "DEMOX_ADMINAUTH/internal/router/irouter"
+        "errors"
+        "github.com/dangweiwu/ginpro/pkg/metric"
+        "github.com/gin-gonic/gin"
+)
+
+type SysAct struct {
+        *hd.Hd
+        ctx    *gin.Context
+        appctx *ctx.AppContext
+}
+
+func NewSysAct(c *gin.Context, appctx *ctx.AppContext) irouter.IHandler <span class="cov8" title="1">{
+        return &amp;SysAct{hd.NewHd(c), c, appctx}
+}</span>
+
+// Do
+// @api |sys| 2 | 设定开关
+// @path | /api/sys
+// @method | PUT
+// @header |n  Authorization |d 权限 |t type |c bascAuth base64(name:password)
+// @form | sysmodel.SysActForm
+// @tbtitle  | 200 Response
+// @tbrow    |n data |e ok |c 成功 |t string
+func (this *SysAct) Do() error <span class="cov8" title="1">{
+        form := &amp;sysmodel.SysActForm{}
+        err := this.Bind(form)
+        if err != nil </span><span class="cov0" title="0">{
+                return err
+        }</span>
+
+        <span class="cov8" title="1">name := form.Name
+        if name == "" </span><span class="cov0" title="0">{
+                return errors.New("缺少名称")
+        }</span>
+
+        <span class="cov8" title="1">switch name </span>{
+        case "trace":<span class="cov8" title="1">
+                if this.appctx.Config.Trace.Enable </span><span class="cov8" title="1">{
+                        if form.Act == "0" </span><span class="cov0" title="0">{
+                                this.appctx.Tracer.SetEnable(false)
+                        }</span> else<span class="cov8" title="1"> if form.Act == "1" </span><span class="cov8" title="1">{
+                                this.appctx.Tracer.SetEnable(true)
+                        }</span> else<span class="cov0" title="0"> {
+                                return errors.New("未知指令")
+                        }</span>
+                } else<span class="cov0" title="0"> {
+                        return errors.New("trace 未启动")
+                }</span>
+        case "metric":<span class="cov8" title="1">
+                if this.appctx.Config.Prom.Enable </span><span class="cov8" title="1">{
+                        if form.Act == "0" </span><span class="cov0" title="0">{
+                                metric.SetEnable(false)
+                        }</span> else<span class="cov8" title="1"> if form.Act == "1" </span><span class="cov8" title="1">{
+                                metric.SetEnable(true)
+                        }</span> else<span class="cov0" title="0"> {
+                                return errors.New("未知指令")
+                        }</span>
+                } else<span class="cov0" title="0"> {
+                        return errors.New("metric 未启动")
+                }</span>
+        default:<span class="cov0" title="0">
+                return errors.New("无效名称")</span>
+        }
+        <span class="cov8" title="1">this.RepOk()
+        return nil</span>
+}
+</pre>
+		
+		<pre class="file" id="file23" style="display: none">package api
+
+import (
+        "DEMOX_ADMINAUTH/internal/app/sys/sysmodel"
+        "DEMOX_ADMINAUTH/internal/ctx"
+        "DEMOX_ADMINAUTH/internal/pkg/api/hd"
+        "DEMOX_ADMINAUTH/internal/router/irouter"
+        "github.com/dangweiwu/ginpro/pkg/metric"
+        "github.com/gin-gonic/gin"
+        "time"
+)
+
+type SysQuery struct {
+        *hd.Hd
+        ctx    *gin.Context
+        appctx *ctx.AppContext
+}
+
+func NewSysQuery(c *gin.Context, appctx *ctx.AppContext) irouter.IHandler <span class="cov8" title="1">{
+        return &amp;SysQuery{hd.NewHd(c), c, appctx}
+}</span>
+
+// Do
+// @api | sys | 1 | 运行状态
+// @path | /api/sys
+// @method | GET
+// @header |n  Authorization |d 权限 |t type |c bascAuth base64(name:password)
+// @response | sysmodel.SysVo | 200 Response
+func (this *SysQuery) Do() error <span class="cov8" title="1">{
+        vo := &amp;sysmodel.SysVo{}
+        vo.StartTime = this.appctx.StartTime.String()
+        vo.RunTime = time.Now().Sub(this.appctx.StartTime).String()
+        if this.appctx.Tracer.IsEnable() </span><span class="cov8" title="1">{
+                vo.OpenTrace = "1"
+        }</span> else<span class="cov0" title="0"> {
+                vo.OpenTrace = "0"
+        }</span>
+
+        <span class="cov8" title="1">if metric.Enabled() </span><span class="cov8" title="1">{
+                vo.OpenMetric = "1"
+        }</span> else<span class="cov0" title="0"> {
+                vo.OpenMetric = "0"
+        }</span>
+
+        <span class="cov8" title="1">this.Rep(vo)
+        return nil</span>
+}
+</pre>
+		
+		</div>
+	</body>
+	<script>
+	(function() {
+		var files = document.getElementById('files');
+		var visible;
+		files.addEventListener('change', onChange, false);
+		function select(part) {
+			if (visible)
+				visible.style.display = 'none';
+			visible = document.getElementById(part);
+			if (!visible)
+				return;
+			files.value = part;
+			visible.style.display = 'block';
+			location.hash = part;
+		}
+		function onChange() {
+			select(files.value);
+			window.scrollTo(0, 0);
+		}
+		if (location.hash != "") {
+			select(location.hash.substr(1));
+		}
+		if (!visible) {
+			select("file0");
+		}
+	})();
+	</script>
+</html>

@@ -1,0 +1,7 @@
+log/
+*.xml
+go.mod
+go.sum
+.idea/
+*.zip
+deploy/docker_compose/data/
