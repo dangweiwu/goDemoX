@@ -5,7 +5,7 @@ import (
 	"DEMOX_ADMINAUTH/internal/ctx"
 	"DEMOX_ADMINAUTH/internal/pkg/api/hd"
 	"DEMOX_ADMINAUTH/internal/pkg/jwtx"
-	"DEMOX_ADMINAUTH/internal/router/irouter"
+	"DEMOX_ADMINAUTH/internal/router"
 	"context"
 	"github.com/gin-gonic/gin"
 )
@@ -19,7 +19,7 @@ type LogOut struct {
 	appctx *ctx.AppContext
 }
 
-func NewLogOut(c *gin.Context, appctx *ctx.AppContext) irouter.IHandler {
+func NewLogOut(c *gin.Context, appctx *ctx.AppContext) router.IHandler {
 	return &LogOut{hd.NewHd(c), c, appctx}
 }
 

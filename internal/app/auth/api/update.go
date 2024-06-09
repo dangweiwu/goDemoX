@@ -4,7 +4,7 @@ import (
 	"DEMOX_ADMINAUTH/internal/app/auth/authmodel"
 	"DEMOX_ADMINAUTH/internal/ctx"
 	"DEMOX_ADMINAUTH/internal/pkg/api/hd"
-	"DEMOX_ADMINAUTH/internal/router/irouter"
+	"DEMOX_ADMINAUTH/internal/router"
 	"errors"
 	"github.com/gin-gonic/gin"
 	"gorm.io/gorm"
@@ -16,7 +16,7 @@ type AuthUpdate struct {
 	appctx *ctx.AppContext
 }
 
-func NewAuthUpdate(c *gin.Context, appctx *ctx.AppContext) irouter.IHandler {
+func NewAuthUpdate(c *gin.Context, appctx *ctx.AppContext) router.IHandler {
 	return &AuthUpdate{hd.NewHd(c), c, appctx}
 }
 

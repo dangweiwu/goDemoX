@@ -10,7 +10,6 @@ import (
 	"go.opentelemetry.io/otel/exporters/otlp/otlptrace/otlptracehttp"
 	"go.opentelemetry.io/otel/sdk/resource"
 	"go.opentelemetry.io/otel/sdk/trace"
-	semconv "go.opentelemetry.io/otel/semconv/v1.25.0"
 	gtrace "go.opentelemetry.io/otel/trace"
 	"sync"
 	"sync/atomic"
@@ -34,6 +33,7 @@ func InitTrace(cfg Config) {
 		traceOnce.Do(func() {
 			_trace = &Trace{
 				config: cfg,
+				Trace:  otel.Tracer("api"),
 			}
 			traceIsRun.Store(false)
 		})
@@ -58,7 +58,6 @@ func (this *Trace) initTraceSdk() error {
 	//传播器
 	this.Propagation = this.newPropagator()
 	otel.SetTextMapPropagator(this.Propagation)
-	log.Println("===========", this.config.EndpointUrl, this.config.Auth)
 	export, err := otlptracehttp.New(context.Background(),
 		otlptracehttp.WithInsecure(),
 		otlptracehttp.WithEndpointURL(this.config.EndpointUrl),
@@ -72,28 +71,26 @@ func (this *Trace) initTraceSdk() error {
 		return err
 	}
 
-	r, err := resource.Merge(
-		resource.Default(),
-		resource.NewWithAttributes(
-			semconv.SchemaURL, semconv.ServiceName(this.config.ServerName),
-		),
-	)
-	if err != nil {
-		log.Printf("Failed to merge resources: %v", err)
-		return err
-	}
+	//r, err := resource.Merge(
+	//	resource.Default(),
+	//	resource.NewWithAttributes(
+	//		semconv.SchemaURL, semconv.ServiceName(this.config.ServerName),
+	//	),
+	//)
+	//if err != nil {
+	//	log.Printf("Failed to merge resources: %v", err)
+	//	return err
+	//}
 
 	traceProvider := trace.NewTracerProvider(
 		trace.WithBatcher(export,
 			// Default is 5s. Set to 1s for demonstrative purposes.
 			trace.WithBatchTimeout(time.Second)),
 
-		trace.WithResource(r),
+		trace.WithResource(resource.Empty()),
 	)
 	this.Provider = traceProvider
 	otel.SetTracerProvider(traceProvider)
-	this.Trace = otel.Tracer(this.config.ServerName)
-	//this.Trace = traceProvider.Tracer(this.config.ServerName)
 	log.Println("Trace SDK initialized successfully")
 	return nil
 }
@@ -152,10 +149,6 @@ func Stop() {
 
 func Start(ctx context.Context, name string, opts ...gtrace.SpanStartOption) (context.Context, Spanx) {
 	return _trace.Start(ctx, name, opts...)
-}
-
-func GetTrace() gtrace.Tracer {
-	return _trace.Trace
 }
 
 func SafeSpan(f func()) error {

@@ -1,4 +1,4 @@
-package irouter
+package router
 
 import (
 	"DEMOX_ADMINAUTH/internal/ctx"

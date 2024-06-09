@@ -4,7 +4,7 @@ import (
 	"DEMOX_ADMINAUTH/internal/app/auth/authmodel"
 	"DEMOX_ADMINAUTH/internal/ctx"
 	"DEMOX_ADMINAUTH/internal/pkg/api/hd"
-	"DEMOX_ADMINAUTH/internal/router/irouter"
+	"DEMOX_ADMINAUTH/internal/router"
 	"errors"
 	"github.com/gin-gonic/gin"
 )
@@ -15,7 +15,7 @@ type AuthCreate struct {
 	appctx *ctx.AppContext
 }
 
-func NewAuthCreate(c *gin.Context, appctx *ctx.AppContext) irouter.IHandler {
+func NewAuthCreate(c *gin.Context, appctx *ctx.AppContext) router.IHandler {
 	return &AuthCreate{hd.NewHd(c), c, appctx}
 }
 

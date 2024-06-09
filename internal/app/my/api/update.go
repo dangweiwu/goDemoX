@@ -5,7 +5,7 @@ import (
 	"DEMOX_ADMINAUTH/internal/ctx"
 	"DEMOX_ADMINAUTH/internal/pkg/api/hd"
 	"DEMOX_ADMINAUTH/internal/pkg/jwtx"
-	"DEMOX_ADMINAUTH/internal/router/irouter"
+	"DEMOX_ADMINAUTH/internal/router"
 	"errors"
 	"github.com/gin-gonic/gin"
 	errs "github.com/pkg/errors"
@@ -22,7 +22,7 @@ type MyUpdate struct {
 	appctx *ctx.AppContext
 }
 
-func NewMyUpdate(c *gin.Context, appctx *ctx.AppContext) irouter.IHandler {
+func NewMyUpdate(c *gin.Context, appctx *ctx.AppContext) router.IHandler {
 	return &MyUpdate{hd.NewHd(c), c, appctx}
 }
 

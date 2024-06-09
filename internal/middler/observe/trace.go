@@ -20,7 +20,7 @@ func Trace(tracename string) gin.HandlerFunc {
 			spanName = fmt.Sprintf("HTTP %s route not found", c.Request.Method)
 		}
 
-		span := utils.WithGinTrace(c, tracename)
+		span := utils.WithGinTraceStart(c, tracename)
 
 		defer span.End()
 		span.SetAttributes(attribute.String("path", c.Request.Method+":"+c.FullPath()))

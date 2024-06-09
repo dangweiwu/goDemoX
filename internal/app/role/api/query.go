@@ -5,7 +5,7 @@ import (
 	"DEMOX_ADMINAUTH/internal/ctx"
 	"DEMOX_ADMINAUTH/internal/pkg/api/hd"
 	"DEMOX_ADMINAUTH/internal/pkg/api/query"
-	"DEMOX_ADMINAUTH/internal/router/irouter"
+	"DEMOX_ADMINAUTH/internal/router"
 	"github.com/gin-gonic/gin"
 	"gorm.io/gorm"
 )
@@ -16,7 +16,7 @@ type RoleQuery struct {
 	appctx *ctx.AppContext
 }
 
-func NewRoleQuery(c *gin.Context, appctx *ctx.AppContext) irouter.IHandler {
+func NewRoleQuery(c *gin.Context, appctx *ctx.AppContext) router.IHandler {
 	return &RoleQuery{hd.NewHd(c), c, appctx}
 }
 

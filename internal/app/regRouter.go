@@ -2,6 +2,7 @@ package app
 
 import (
 	"DEMOX_ADMINAUTH/internal/app/admin"
+	"DEMOX_ADMINAUTH/internal/app/apitest"
 	"DEMOX_ADMINAUTH/internal/app/auth"
 	"DEMOX_ADMINAUTH/internal/app/my"
 	"DEMOX_ADMINAUTH/internal/app/role"
@@ -17,6 +18,7 @@ var routes = []func(r *router.Router, appctx *ctx.AppContext){
 	auth.Route,
 	role.Route,
 	sys.Route,
+	apitest.Route,
 }
 
 func RegisterRoute(engine *gin.Engine, appctx *ctx.AppContext) {

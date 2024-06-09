@@ -7,7 +7,7 @@ import (
 	"DEMOX_ADMINAUTH/internal/pkg"
 	"DEMOX_ADMINAUTH/internal/pkg/api/hd"
 	"DEMOX_ADMINAUTH/internal/pkg/jwtx"
-	"DEMOX_ADMINAUTH/internal/router/irouter"
+	"DEMOX_ADMINAUTH/internal/router"
 	"context"
 	"errors"
 	"github.com/gin-gonic/gin"
@@ -26,7 +26,7 @@ type ResetPassword struct {
 	appctx *ctx.AppContext
 }
 
-func NewResetPassword(c *gin.Context, appctx *ctx.AppContext) irouter.IHandler {
+func NewResetPassword(c *gin.Context, appctx *ctx.AppContext) router.IHandler {
 	return &ResetPassword{hd.NewHd(c), c, appctx}
 }
 

@@ -6,7 +6,6 @@ import (
 	"DEMOX_ADMINAUTH/internal/pkg/log"
 	"github.com/dangweiwu/ginpro/pkg/mysqlx"
 	"github.com/dangweiwu/ginpro/pkg/redisx"
-	"github.com/dangweiwu/ginpro/pkg/tracex"
 	"github.com/go-redis/redis/v8"
 	errs "github.com/pkg/errors"
 	"go.uber.org/zap"
@@ -22,14 +21,12 @@ type AppContext struct {
 	Db        *gorm.DB
 	Redis     *redis.Client
 	AuthCheck *authcheck.AuthCheck
-	Tracer    *tracex.Tracex
 }
 
 func NewAppContext(c config.Config) (*AppContext, error) {
 	//初始化日志
 	appctx := &AppContext{}
 	appctx.StartTime = time.Now()
-	appctx.Tracer = tracex.NewTrace(c.App.Name)
 	appctx.Config = c
 
 	if lg, err := log.New(c.Log); err != nil {

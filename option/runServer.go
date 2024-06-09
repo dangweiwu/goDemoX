@@ -8,6 +8,7 @@ import (
 	"DEMOX_ADMINAUTH/internal/pkg/api/apiserver"
 	"DEMOX_ADMINAUTH/internal/pkg/fullurl"
 	"DEMOX_ADMINAUTH/internal/pkg/log"
+	"DEMOX_ADMINAUTH/internal/pkg/observe/metric"
 	"DEMOX_ADMINAUTH/internal/pkg/observe/tracex"
 	"github.com/dangweiwu/ginpro/pkg/yamconfig"
 	"github.com/gin-gonic/gin"
@@ -18,6 +19,7 @@ type RunServe struct {
 }
 
 func (this *RunServe) Execute(args []string) error {
+	//time.FixedZone()
 	//配置参数
 	var c config.Config
 	yamconfig.MustLoad(Opt.ConfigPath, &c)
@@ -35,18 +37,6 @@ func (this *RunServe) Execute(args []string) error {
 	//engine := gin.Default()
 
 	engine := gin.New()
-	//trace
-	//if c.Trace.Enable {
-	//	tp := tracex.InitTracerHTTP(c.Trace.Endpoint, c.Trace.UrlPath, c.Trace.Auth, c.App.Name)
-	//	defer func() {
-	//		if err := tp.Shutdown(context.Background()); err != nil {
-	//			appctx.Log.Error("Error shutting down tracer provider", zap.Error(err))
-	//		}
-	//	}()
-	//}
-
-	//启动promagent
-	//engine.GET("/metrics", gin.BasicAuth(gin.Accounts{c.Prom.UserName: c.Prom.Password}), gin.WrapH(promhttp.Handler()))
 
 	//observe 可观测性
 	// trace 链路跟踪
@@ -57,9 +47,17 @@ func (this *RunServe) Execute(args []string) error {
 			ServerName:  c.Trace.ServerName,
 			StreamName:  c.Trace.StreamName,
 		})
-		println(c.Trace.Auth, c.Trace.EndpointUrl, c.Trace.StreamName)
 		tracex.Run()
 		log.Msg("trace启动").Info(appctx.Log)
+	}
+	// metric
+	if c.Metric.Enable {
+		metric.InitMetric(metric.Config{
+			EndpointUrl: c.Metric.EndpointUrl,
+			Auth:        c.Metric.Auth,
+			ServerName:  c.Metric.ServerName,
+			StreamName:  c.Metric.StreamName,
+		})
 	}
 
 	//中间件
@@ -76,5 +74,8 @@ func (this *RunServe) Execute(args []string) error {
 
 	//启动
 	apiserver.Run(engine, appctx.Log, c.Api)
+
+	//结束
+	tracex.Stop()
 	return nil
 }

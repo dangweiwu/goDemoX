@@ -31,10 +31,7 @@ Jwt:
   # 过期时间 3天
   Exp: 259200
 
-Prom:
-  Enable: true
-  Username: goserver
-  Password: goserver123
+
 
 Trace:
   Enable: true
@@ -43,7 +40,13 @@ Trace:
   ServerName: "adminsys"
   StreamName:  "default"
 
-
+Metric:
+  Enable: true
+  EndpointUrl: "http://172.19.0.7:5080/api/abc/metrics"
+  Auth: ""
+  ServerName: ""
+  StreamName: ""
+  Interval: "" //导出时间间隔 单位秒
 
 
 

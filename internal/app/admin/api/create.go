@@ -5,7 +5,7 @@ import (
 	"DEMOX_ADMINAUTH/internal/ctx"
 	"DEMOX_ADMINAUTH/internal/pkg"
 	"DEMOX_ADMINAUTH/internal/pkg/api/hd"
-	"DEMOX_ADMINAUTH/internal/router/irouter"
+	"DEMOX_ADMINAUTH/internal/router"
 	"errors"
 	"github.com/gin-gonic/gin"
 	errs "github.com/pkg/errors"
@@ -17,7 +17,7 @@ type AdminCreate struct {
 	appctx *ctx.AppContext
 }
 
-func NewAdminCreate(c *gin.Context, appctx *ctx.AppContext) irouter.IHandler {
+func NewAdminCreate(c *gin.Context, appctx *ctx.AppContext) router.IHandler {
 	return &AdminCreate{hd.NewHd(c), c, appctx}
 }
 

@@ -4,7 +4,7 @@ import (
 	"DEMOX_ADMINAUTH/internal/app/role/rolemodel"
 	"DEMOX_ADMINAUTH/internal/ctx"
 	"DEMOX_ADMINAUTH/internal/pkg/api/hd"
-	"DEMOX_ADMINAUTH/internal/router/irouter"
+	"DEMOX_ADMINAUTH/internal/router"
 	"errors"
 	"github.com/gin-gonic/gin"
 )
@@ -15,7 +15,7 @@ type RoleCreate struct {
 	appctx *ctx.AppContext
 }
 
-func NewRoleCreate(c *gin.Context, appctx *ctx.AppContext) irouter.IHandler {
+func NewRoleCreate(c *gin.Context, appctx *ctx.AppContext) router.IHandler {
 	return &RoleCreate{hd.NewHd(c), c, appctx}
 }
 
