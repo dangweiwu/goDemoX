@@ -3,7 +3,7 @@ package middler
 import (
 	"DEMOX_ADMINAUTH/internal/ctx"
 	"DEMOX_ADMINAUTH/internal/pkg/jwtx"
-	"DEMOX_ADMINAUTH/internal/pkg/log"
+	"DEMOX_ADMINAUTH/internal/pkg/logx"
 	"github.com/gin-contrib/requestid"
 	"github.com/gin-gonic/gin"
 	"time"
@@ -37,7 +37,7 @@ func HttpLog(appctx *ctx.AppContext) gin.HandlerFunc {
 			}
 			uid, _ := jwtx.GetUid(c)
 
-			l := log.Msg("request").Kind("api").Trace(requestid.Get(c)).FmtData("useid:%d method:%s path:%s status:%d size:%d latency:%d",
+			l := logx.Msg("request").Kind("api").Trace(requestid.Get(c)).FmtData("useid:%d method:%s path:%s status:%d size:%d latency:%d",
 				uid, c.Request.Method, c.Request.URL.Path, c.Writer.Status(), c.Writer.Size(), int(Latency.Milliseconds()))
 
 			if len(c.Errors) != 0 {

@@ -1,7 +1,7 @@
 package observe
 
 import (
-	"DEMOX_ADMINAUTH/internal/pkg/observe/metric"
+	"DEMOX_ADMINAUTH/internal/pkg/observe/metricx"
 	"context"
 	"fmt"
 	"github.com/gin-gonic/gin"
@@ -16,7 +16,7 @@ import (
 采集请求时长
 */
 func RequestDuration(metricname string) gin.HandlerFunc {
-	mt := metric.GetMeter()
+	mt := metricx.GetMeter()
 	//每次新建会有一个starttime，就算metricname相同，也不是同个对象。
 	requestDuration, err := mt.Float64Histogram(
 		metricname,
@@ -28,7 +28,7 @@ func RequestDuration(metricname string) gin.HandlerFunc {
 	}
 
 	return func(c *gin.Context) {
-		if !metric.GetEnable() {
+		if !metricx.GetEnable() {
 			c.Next()
 			return
 		}

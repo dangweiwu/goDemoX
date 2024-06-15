@@ -33,7 +33,7 @@ func InitTrace(cfg Config) {
 		traceOnce.Do(func() {
 			_trace = &Trace{
 				config: cfg,
-				Trace:  otel.Tracer("api"),
+				Trace:  otel.Tracer(cfg.ServerName),
 			}
 			traceIsRun.Store(false)
 		})

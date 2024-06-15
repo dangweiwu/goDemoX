@@ -3,7 +3,7 @@ package config
 import (
 	"DEMOX_ADMINAUTH/internal/pkg/api/apiserver/apiconfig"
 	"DEMOX_ADMINAUTH/internal/pkg/jwtx/jwtconfig"
-	"DEMOX_ADMINAUTH/internal/pkg/log"
+	"DEMOX_ADMINAUTH/internal/pkg/logx"
 	"github.com/dangweiwu/ginpro/pkg/mysqlx/mysqlxconfig"
 	"github.com/dangweiwu/ginpro/pkg/redisx/redisconfig"
 )
@@ -12,7 +12,7 @@ import (
 type Config struct {
 	App    App
 	Api    apiconfig.ApiConfig
-	Log    log.Config
+	Log    logx.Config
 	Mysql  mysqlxconfig.Mysql
 	Jwt    jwtconfig.JwtConfig
 	Redis  redisconfig.RedisConfig

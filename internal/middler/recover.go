@@ -2,7 +2,7 @@ package middler
 
 import (
 	"DEMOX_ADMINAUTH/internal/ctx"
-	"DEMOX_ADMINAUTH/internal/pkg/log"
+	"DEMOX_ADMINAUTH/internal/pkg/logx"
 	"fmt"
 	"github.com/gin-contrib/requestid"
 	"github.com/gin-gonic/gin"
@@ -40,13 +40,13 @@ func Recovery(appctx *ctx.AppContext) gin.HandlerFunc {
 				}
 				//httpRequest, _ := httputil.DumpRequest(c.Request, false)
 				if brokenPipe {
-					log.Msg("网络中断").Kind("api").Trace(requestid.Get(c)).ErrData(err.(error)).Err(appctx.Log)
+					logx.Msg("网络中断").Kind("api").Trace(requestid.Get(c)).ErrData(err.(error)).Err(appctx.Log)
 					c.Error(err.(error)) // nolint: errcheck
 					c.Abort()
 					return
 				}
 
-				log.Msg("系统异常").Kind("api").Trace(requestid.Get(c)).ErrData(err.(error)).Data(string(debug.Stack())).Err(appctx.Log)
+				logx.Msg("系统异常").Kind("api").Trace(requestid.Get(c)).ErrData(err.(error)).Data(string(debug.Stack())).Err(appctx.Log)
 				c.AbortWithStatus(http.StatusInternalServerError)
 				c.String(500, fmt.Sprintf("%v", err))
 			}

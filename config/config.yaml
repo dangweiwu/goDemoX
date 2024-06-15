@@ -31,22 +31,20 @@ Jwt:
   # 过期时间 3天
   Exp: 259200
 
-
-
 Trace:
   Enable: true
-  EndpointUrl: "http://172.19.0.7:5080/api/abc/traces"
-  Auth: "Basic cm9vdEBxcS5jb206VlpWMHc1akZDRDhSWm9rMA=="
+  EndpointUrl: "http://observe:5080/api/default/traces"
+  Auth: "Basic cm9vdEBxcS5jb206RFFCRmhVcXRYaVh1MkJtYg=="
   ServerName: "adminsys"
-  StreamName:  "default"
+  StreamName:  "adminstream"
 
 Metric:
   Enable: true
-  EndpointUrl: "http://172.19.0.7:5080/api/abc/metrics"
-  Auth: ""
-  ServerName: ""
-  StreamName: ""
-  Interval: "" //导出时间间隔 单位秒
+  EndpointUrl: "http://observe:5080/api/default/v1/metrics"
+  Auth: "Basic cm9vdEBxcS5jb206RFFCRmhVcXRYaVh1MkJtYg=="
+  ServerName: "adminsys"
+  StreamName: "default"
+  Interval: 10 #导出时间间隔 单位秒
 
 
 

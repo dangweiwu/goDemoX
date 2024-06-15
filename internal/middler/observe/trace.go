@@ -3,7 +3,6 @@ package observe
 import (
 	"DEMOX_ADMINAUTH/internal/pkg/observe/tracex"
 	"DEMOX_ADMINAUTH/internal/pkg/utils"
-	"fmt"
 	"github.com/gin-gonic/gin"
 	"go.opentelemetry.io/otel/attribute"
 )
@@ -15,10 +14,10 @@ func Trace(tracename string) gin.HandlerFunc {
 			return
 		}
 
-		spanName := c.FullPath()
-		if spanName == "" {
-			spanName = fmt.Sprintf("HTTP %s route not found", c.Request.Method)
-		}
+		//spanName := c.FullPath()
+		//if spanName == "" {
+		//	spanName = fmt.Sprintf("HTTP %s route not found", c.Request.Method)
+		//}
 
 		span := utils.WithGinTraceStart(c, tracename)
 

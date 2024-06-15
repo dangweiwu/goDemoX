@@ -4,9 +4,10 @@ import (
 	"DEMOX_ADMINAUTH/internal/app/sys/sysmodel"
 	"DEMOX_ADMINAUTH/internal/ctx"
 	"DEMOX_ADMINAUTH/internal/pkg/api/hd"
+	"DEMOX_ADMINAUTH/internal/pkg/observe/metricx"
+	"DEMOX_ADMINAUTH/internal/pkg/observe/tracex"
 	"DEMOX_ADMINAUTH/internal/router"
 	"errors"
-	"github.com/dangweiwu/ginpro/pkg/metric"
 	"github.com/gin-gonic/gin"
 )
 
@@ -44,9 +45,9 @@ func (this *SysAct) Do() error {
 	case "trace":
 		if this.appctx.Config.Trace.Enable {
 			if form.Act == "0" {
-				this.appctx.Tracer.SetEnable(false)
+				tracex.Stop()
 			} else if form.Act == "1" {
-				this.appctx.Tracer.SetEnable(true)
+				tracex.Run()
 			} else {
 				return errors.New("未知指令")
 			}
@@ -54,11 +55,11 @@ func (this *SysAct) Do() error {
 			return errors.New("trace 未启动")
 		}
 	case "metric":
-		if this.appctx.Config.Prom.Enable {
+		if this.appctx.Config.Metric.Enable {
 			if form.Act == "0" {
-				metric.SetEnable(false)
+				metricx.Stop()
 			} else if form.Act == "1" {
-				metric.SetEnable(true)
+				metricx.Run()
 			} else {
 				return errors.New("未知指令")
 			}

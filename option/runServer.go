@@ -7,8 +7,8 @@ import (
 	"DEMOX_ADMINAUTH/internal/middler"
 	"DEMOX_ADMINAUTH/internal/pkg/api/apiserver"
 	"DEMOX_ADMINAUTH/internal/pkg/fullurl"
-	"DEMOX_ADMINAUTH/internal/pkg/log"
-	"DEMOX_ADMINAUTH/internal/pkg/observe/metric"
+	"DEMOX_ADMINAUTH/internal/pkg/logx"
+	"DEMOX_ADMINAUTH/internal/pkg/observe/metricx"
 	"DEMOX_ADMINAUTH/internal/pkg/observe/tracex"
 	"github.com/dangweiwu/ginpro/pkg/yamconfig"
 	"github.com/gin-gonic/gin"
@@ -48,16 +48,18 @@ func (this *RunServe) Execute(args []string) error {
 			StreamName:  c.Trace.StreamName,
 		})
 		tracex.Run()
-		log.Msg("trace启动").Info(appctx.Log)
+		logx.Msg("trace启动").Info(appctx.Log)
 	}
 	// metric
 	if c.Metric.Enable {
-		metric.InitMetric(metric.Config{
+		metricx.InitMetric(metricx.Config{
 			EndpointUrl: c.Metric.EndpointUrl,
 			Auth:        c.Metric.Auth,
 			ServerName:  c.Metric.ServerName,
 			StreamName:  c.Metric.StreamName,
 		})
+		metricx.Run()
+		logx.Msg("metric启动").Info(appctx.Log)
 	}
 
 	//中间件

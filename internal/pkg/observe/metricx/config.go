@@ -1,4 +1,4 @@
-package metric
+package metricx
 
 type Config struct {
 	EndpointUrl string `validate:"empty=false"` // 链路追踪地址

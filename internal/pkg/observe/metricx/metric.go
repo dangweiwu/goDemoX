@@ -1,4 +1,4 @@
-package metric
+package metricx
 
 import (
 	"context"
@@ -30,7 +30,7 @@ func InitMetric(cfg Config) {
 		metricOnce.Do(func() {
 			_metric = &Metric{
 				config: cfg,
-				Meter:  otel.Meter("api"),
+				Meter:  otel.Meter(cfg.ServerName),
 			}
 			metricIsRun.Store(false)
 			//_metric.Run()
@@ -53,11 +53,11 @@ func (this *Metric) initSdk() error {
 	}
 	//resource.Default()
 	//r, err := resource.Merge(
-	//resource.Empty(),
-	//resource.Default(),
-	//resource.NewWithAttributes(
-	//	semconv.SchemaURL, semconv.ServiceName(this.config.ServerName),
-	//),
+	//	resource.Empty(),
+	//	//resource.Default(),
+	//	resource.NewWithAttributes(
+	//		semconv.SchemaURL, semconv.ServiceName(this.config.ServerName),
+	//	),
 	//)
 	//if err != nil {
 	//	log.Println("resource.Merge err", err)
@@ -74,7 +74,7 @@ func (this *Metric) initSdk() error {
 
 	otel.SetMeterProvider(this.Provider)
 	//this.Meter = meterProvider.Meter(this.config.ServerName)
-	log.Println("Trace SDK initialized successfully")
+	log.Println("Metric SDK initialized successfully")
 	return nil
 }
 

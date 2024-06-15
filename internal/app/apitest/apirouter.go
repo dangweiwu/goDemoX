@@ -13,7 +13,7 @@ func Route(r *router.Router, appctx *ctx.AppContext) {
 	r.Root.GET("/test",
 		observe.RequestTotal("api_total"),
 		observe.RequestDuration("api_duration"),
-		observe.Trace("api_test"),
+		observe.Trace("test"),
 		router.Do(appctx, api.NewApiTest))
 
 }

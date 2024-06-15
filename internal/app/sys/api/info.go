@@ -4,8 +4,9 @@ import (
 	"DEMOX_ADMINAUTH/internal/app/sys/sysmodel"
 	"DEMOX_ADMINAUTH/internal/ctx"
 	"DEMOX_ADMINAUTH/internal/pkg/api/hd"
+	"DEMOX_ADMINAUTH/internal/pkg/observe/metricx"
+	"DEMOX_ADMINAUTH/internal/pkg/observe/tracex"
 	"DEMOX_ADMINAUTH/internal/router"
-	"github.com/dangweiwu/ginpro/pkg/metric"
 	"github.com/gin-gonic/gin"
 	"time"
 )
@@ -30,13 +31,13 @@ func (this *SysQuery) Do() error {
 	vo := &sysmodel.SysVo{}
 	vo.StartTime = this.appctx.StartTime.String()
 	vo.RunTime = time.Now().Sub(this.appctx.StartTime).String()
-	if this.appctx.Tracer.IsEnable() {
+	if tracex.GetEable() {
 		vo.OpenTrace = "1"
 	} else {
 		vo.OpenTrace = "0"
 	}
 
-	if metric.Enabled() {
+	if metricx.GetEnable() {
 		vo.OpenMetric = "1"
 	} else {
 		vo.OpenMetric = "0"

@@ -5,7 +5,6 @@ import (
 	"DEMOX_ADMINAUTH/internal/app/auth/authcheck"
 	"DEMOX_ADMINAUTH/internal/config"
 	"DEMOX_ADMINAUTH/internal/ctx"
-	"DEMOX_ADMINAUTH/internal/pkg/log"
 	mredis "github.com/alicebob/miniredis/v2"
 	"github.com/dangweiwu/ginpro/pkg/mysqlx"
 	"github.com/dangweiwu/ginpro/pkg/mysqlx/mysqlfake"
@@ -58,7 +57,7 @@ func NewTestContext(cfg config.Config) (*TestContext, error) {
 
 func (this *TestContext) GetServerCtx() (*ctx.AppContext, error) {
 	a := &ctx.AppContext{}
-	if lg, err := log.New(this.Config.Log); err != nil {
+	if lg, err := logx.New(this.Config.Log); err != nil {
 		return nil, err
 	} else {
 		a.Log = lg
@@ -80,7 +79,7 @@ func (this *TestContext) InitChecAuth() error {
 		return err
 	} else {
 		this.ctx.AuthCheck = ck
-		log.Msg("casbin初始化完毕").Info(this.ctx.Log)
+		logx.Msg("casbin初始化完毕").Info(this.ctx.Log)
 	}
 	return nil
 }

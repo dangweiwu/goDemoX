@@ -16,7 +16,7 @@ func Route(r *router.Router, appctx *ctx.AppContext) {
 
 	r.Jwt.PUT("/my/password", router.Do(appctx, api.NewMyUpdatePwd))
 
-	r.Root.POST("/login", observe.Trace("login"), router.Do(appctx, api.NewLogin))
+	r.Root.POST("/login", observe.Trace("/login"), router.Do(appctx, api.NewLogin))
 
 	r.Jwt.POST("/logout", router.Do(appctx, api.NewLogOut))
 

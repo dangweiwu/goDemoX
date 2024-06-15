@@ -1,7 +1,7 @@
 package observe
 
 import (
-	"DEMOX_ADMINAUTH/internal/pkg/observe/metric"
+	"DEMOX_ADMINAUTH/internal/pkg/observe/metricx"
 	"context"
 	"github.com/gin-gonic/gin"
 	"go.opentelemetry.io/otel/attribute"
@@ -11,10 +11,11 @@ import (
 
 // 指标采集 请求数 计算qps
 func RequestTotal(metricname string) gin.HandlerFunc {
-	mt := metric.GetMeter()
+	mt := metricx.GetMeter()
 	if mt == nil {
 		panic("metric not init")
 	}
+	//mt = otel.Meter(cfg.ServerName),
 	//每次新建会有一个starttime，就算metricname相同，也不是同个对象。
 	requestTotal, err := mt.Int64Counter(
 		metricname,
@@ -26,7 +27,7 @@ func RequestTotal(metricname string) gin.HandlerFunc {
 	}
 
 	return func(c *gin.Context) {
-		if !metric.GetEnable() {
+		if !metricx.GetEnable() {
 			c.Next()
 			return
 		}

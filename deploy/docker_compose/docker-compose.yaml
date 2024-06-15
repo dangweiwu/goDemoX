@@ -89,8 +89,22 @@ services:
       redis:
         condition: service_healthy
 
-
-
+#  可观测性
+  observe:
+    image: public.ecr.aws/zinclabs/openobserve:v0.10.7
+    container_name: DEMO_ADMINAUTH_observe
+    environment:
+      TZ: Asia/Shanghai
+      ZO_DATA_DIR: "/data"
+      ZO_ROOT_USER_EMAIL: "root@qq.com"
+      ZO_ROOT_USER_PASSWORD: "123456"
+    volumes:
+      - "./data/observe:/data"
+    ports:
+      - "5080:5080"
+    networks:
+      - DEMO_ADMINAUTH_network
+#  主程序
   admin:
     image: golang:1.22-alpine
     container_name: DEMO_ADMINAUTH_admin

@@ -51,8 +51,7 @@ var QueryRule = map[string]string{
 }
 
 func (this *AdminQuery) Query() (interface{}, error) {
-	span := this.appctx.Tracer.GinStart(this.ctx, "dbstart")
-	defer span.End()
+
 	po := &adminmodel.AdminVo{}
 	pos := []adminmodel.AdminVo{}
 	q := query.NewQuery(this.ctx, this.appctx.Db, QueryRule, po, &pos)
@@ -62,6 +61,5 @@ func (this *AdminQuery) Query() (interface{}, error) {
 			return q.Where(db)
 		})
 	*/
-	span.AddEvent("dbstart")
 	return q.Do()
 }

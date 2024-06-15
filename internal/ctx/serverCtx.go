@@ -3,7 +3,7 @@ package ctx
 import (
 	"DEMOX_ADMINAUTH/internal/app/auth/authcheck"
 	"DEMOX_ADMINAUTH/internal/config"
-	"DEMOX_ADMINAUTH/internal/pkg/log"
+	"DEMOX_ADMINAUTH/internal/pkg/logx"
 	"github.com/dangweiwu/ginpro/pkg/mysqlx"
 	"github.com/dangweiwu/ginpro/pkg/redisx"
 	"github.com/go-redis/redis/v8"
@@ -29,7 +29,7 @@ func NewAppContext(c config.Config) (*AppContext, error) {
 	appctx.StartTime = time.Now()
 	appctx.Config = c
 
-	if lg, err := log.New(c.Log); err != nil {
+	if lg, err := logx.New(c.Log); err != nil {
 		return nil, err
 	} else {
 		appctx.Log = lg
@@ -42,7 +42,7 @@ func NewAppContext(c config.Config) (*AppContext, error) {
 	} else {
 		d.Debug()
 		appctx.Db = d
-		log.Msg("数据库链接成功").Info(appctx.Log)
+		logx.Msg("数据库链接成功").Info(appctx.Log)
 	}
 
 	//初始化redis
@@ -50,7 +50,7 @@ func NewAppContext(c config.Config) (*AppContext, error) {
 		return nil, errs.WithMessage(err, "err init redis")
 	} else {
 		appctx.Redis = redisCli
-		log.Msg("redis链接成功").Info(appctx.Log)
+		logx.Msg("redis链接成功").Info(appctx.Log)
 	}
 
 	//初始化权限
@@ -58,7 +58,7 @@ func NewAppContext(c config.Config) (*AppContext, error) {
 		return nil, err
 	} else {
 		appctx.AuthCheck = ck
-		log.Msg("casbin初始化完毕").Info(appctx.Log)
+		logx.Msg("casbin初始化完毕").Info(appctx.Log)
 
 	}
 

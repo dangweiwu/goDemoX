@@ -27,7 +27,7 @@ func NewApiTest(c *gin.Context, appctx *ctx.AppContext) router.IHandler {
 
 func (this ApiTest) Do() error {
 
-	span := utils.WithGinTraceStart(this.ctx, "apitest")
+	span := utils.WithGinTraceStart(this.ctx, "do")
 	defer span.End()
 
 	span.SetAttributes(attribute.String("test", "测试"))

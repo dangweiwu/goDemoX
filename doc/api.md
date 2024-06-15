@@ -1292,3 +1292,30 @@ window.Fetch(req);
 |auth|权限ID|[]string|||
 
 ---
+# 6 test
+
+测试api
+
+## 6.1 我的详情
+
+> 基础信息
+
+- **PATH: /api/test**
+- **METHOD: GET**
+
+```button
+var req = {
+
+    Url:"/api/test",
+    Method:"GET",
+}
+window.Fetch(req);
+```
+
+>  200 Response 
+
+| 参数 | 说明 | 类型 | 示例 | 备注 |
+| --- | --- | -- | -- | -- |
+|data||any||响应数据 参考Data定义或说明|
+
+---
