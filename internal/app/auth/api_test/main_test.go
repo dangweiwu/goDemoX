@@ -1,40 +1,56 @@
 package api_test
 
 import (
-	"DEMOX_ADMINAUTH/internal/ctx"
-	"DEMOX_ADMINAUTH/internal/testtool"
-	"DEMOX_ADMINAUTH/internal/testtool/testctx"
+	"DEMOX_ADMINAUTH/internal/app/auth"
+	"DEMOX_ADMINAUTH/internal/app/auth/authmodel"
+	"DEMOX_ADMINAUTH/internal/app/role/rolemodel"
+	"DEMOX_ADMINAUTH/internal/ctx/testapp"
+	"DEMOX_ADMINAUTH/internal/pkg/dbtype"
+	"DEMOX_ADMINAUTH/internal/router"
+	"github.com/gin-gonic/gin"
 	"testing"
 )
 
-var SerCtx *ctx.AppContext
-var TestCtx *testctx.TestContext
-
 func TestMain(m *testing.M) {
-	config := testtool.NewTestConfig()
-	//单元测试并发执行 防止数据库端口冲突
-	config.Mysql.Host = "127.0.0.1:4309"
-	config.Mysql.LogLevel = 1
-	ctx, err := testctx.NewTestContext(config)
 
-	defer func() {
-		ctx.Close()
-	}()
-	if err != nil {
-		panic(err)
-	}
-
-	SerCtx, err = ctx.GetServerCtx()
-	if err != nil {
-		panic(err)
-	}
-	err = ctx.InitChecAuth()
-	if err != nil {
-		panic(err)
-	}
-	TestCtx = ctx
-	if err != nil {
-		panic(err)
-	}
 	m.Run()
+}
+
+func NewRole() *rolemodel.RolePo {
+	return &rolemodel.RolePo{
+		Base:     dbtype.Base{ID: 1},
+		Code:     "role1",
+		Name:     "角色1",
+		OrderNum: 1,
+		Status:   "1",
+		Memo:     "这是memo",
+		Auth:     dbtype.List[string]{"1", "2"},
+	}
+}
+
+func NewAuth() *authmodel.AuthPo {
+	return &authmodel.AuthPo{
+		Base:     dbtype.Base{ID: 1},
+		Code:     "auth1",
+		Name:     "权限1",
+		OrderNum: 1,
+		Kind:     "0",
+		ParentId: 0,
+		Api:      "/api/v1/auth/auth",
+	}
+}
+
+func newApp() *testapp.TestApp {
+	app, err := testapp.NewTestApp()
+	if err != nil {
+		panic(err)
+	}
+	app.RegDb(&rolemodel.RolePo{}, &authmodel.AuthPo{})
+	app.RegRoute(func(engine *gin.Engine) {
+		auth.Route(router.NewTestBaseRouter(engine, app.AppContext), app.AppContext)
+	})
+	if err := app.InitAuthCheckout(); err != nil {
+		panic(err)
+	}
+	return app
 }

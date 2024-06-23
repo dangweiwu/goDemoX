@@ -1,58 +1,42 @@
 version: '3'
 
 vars:
-  coverout: "cover.out"
-  htmlout: "cover.html"
-  covercount: 70
+  host: "156.238.224.117"
+  groupname: "demox_adminauth"
   dockerName: "DEMO_ADMINAUTH_admin"
-
-
+  prodRoot: "/root/DEMOX_ADMINAUTH"
+  prodNetWork: ""
 tasks:
-  # 测试
+
+  ## 测试
   test:
+    vars:
+      coverout: "cover.out"
+      htmlout: "cover.html"
+      coverPack: >
+        DEMOX_ADMINAUTH/internal/app/...,
+      #DEMOX_ADMINAUTH/internal/middler/...
+      testPack: >
+        DEMOX_ADMINAUTH/internal/app/...
+      #DEMOX_ADMINAUTH/internal/middler/...
     cmds:
-      - go install github.com/jstemmer/go-junit-report@latest
-
-      - go test -cover -v
+      - go test -cover 
         -coverprofile="{{.coverout}}"
-        -coverpkg={{.pkgs}}
-        ./... | go-junit-report --set-exit-code > report.xml
-
+        -coverpkg="{{.coverPack | replace " " ""}}"
+        {{.testPack}}
       - go tool cover -html={{.coverout}} -o {{.htmlout}}
+      - go tool cover -func={{.coverout}}
 
-      - go tool cover -func={{.coverout}} | grep 'total:' | gawk -v target={{.covercount}} -f ./script/cover.awk
-
-    vars:
-      pkgs:
-        sh: go list ./... |grep 'api' | grep -v 'api_test'|  grep -v 'pkg' |tr '\n' ',' | sed 's/.$//g'
-  testx:
-    cmds:
-      - go install github.com/jstemmer/go-junit-report@latest
-
-      - go test -cover -v
-        -coverprofile="{{.coverout}}"
-        -coverpkg={{.pkgs}}
-        ./...
-
-    vars:
-      pkgs:
-        sh: go list ./... |grep 'api' | grep -v 'api_test'| grep -v 'pkg'  | tr '\n' ',' | sed 's/.$//g'
-
-  # 文档
+  ## 文档生成
   doc:
     - go install github.com/dangweiwu/apidoc@latest
     - apidoc run
 
-  swag:
-    - go install github.com/swaggo/swag/cmd/swag@latest
-    - swag fmt
-    - swag init --pd --parseInternal -o doc/swag
-
-  # 部署开发docker-compose
+  ## 开发
   devInitDocker:
-    dir: ./deploy/docker_compose
+    dir: ./deploy/dev/
     cmds:
-      - docker-compose -p demox_adminauth -f docker-compose.yaml up -d
+      - docker-compose -p {{.groupname}} -f docker-compose.yaml up -d
   devInitDb:
     - docker exec -it {{.dockerName}} go run ./cmd/server/main.go -f ./config/config.yaml inittable
 
@@ -62,5 +46,71 @@ tasks:
   devRun:
     - docker exec -it {{.dockerName}} go run ./cmd/server/main.go -f ./config/config.yaml run
 
-  devBuild:
-    - docker exec -it {{.dockerName}} go build ./cmd/server/main.go
+  build:
+    - docker exec -it {{.dockerName}} go build -o deploy/prod/main  ./cmd/server/main.go
+
+  ## 部署
+  #. 创建远程文件夹 初次使用
+  prodMkdir:
+    cmds:
+      - >-
+        ssh root@{{.host}} '
+        mkdir -p {{.prodRoot}}/app/config &
+        mkdir -p {{.prodRoot}}/app/log &
+        mkdir -p {{.prodRoot}}/app/view &
+        mkdir -p {{.prodRoot}}/data &
+        mkdir -p {{.prodRoot}}/sql'
+
+
+  prodScpFile:
+    #. 上传文件
+    - scp ./deploy/prod/docker-compose.yaml root@{{.host}}:{{.prodRoot}}/docker-compose.yaml
+    - scp ./deploy/prod/config/config.yaml root@{{.host}}:{{.prodRoot}}/app/config/config.yaml
+    - scp ./deploy/prod/sql/initdb.sql root@{{.host}}:{{.prodRoot}}/sql
+    - scp ./deploy/prod/config/logconfig.yaml root@{{.host}}:{{.prodRoot}}/app/log
+
+
+  prodRun:
+    #. prod 启动
+    cmds:
+      - task: build
+      - ssh root@{{.host}} 'cd {{.prodRoot}} && docker compose ps && docker compose stop main || true'
+      - ssh root@{{.host}} 'mv {{.prodRoot}}/app/main {{.prodRoot}}/app/main.1 || true'
+      - scp ./deploy/prod/main root@{{.host}}:{{.prodRoot}}/app/main
+      - ssh root@{{.host}} 'chmod 755 {{.prodRoot}}/app/main'
+      - ssh root@{{.host}} 'cd {{.prodRoot}} && docker compose up -d admin'
+      - ssh root@{{.host}} 'cd {{.prodRoot}} && docker compose ps'
+      - ssh root@{{.host}} 'docker logs -n 100 admin'
+
+  prodInitDb:
+    # 数据库更新
+    cmds:
+      - task: build
+      - scp ./deploy/prod/main root@{{.host}}:{{.prodRoot}}/app/main.db
+      - ssh root@{{.host}} '{{.prodRoot}}/app/main.db'
+      - ssh root@{{.host}} 'docker run --rm --network {{.network}} -v {{.prodRoot}}/app:/app -w /app golang:1.22-alpine ./main.db -f ./config/config.yaml inittable'
+  prodInitUser:
+    # 用户更新
+    cmds:
+      - task: build
+      - scp ./deploy/prod/main root@{{.host}}:{{.prodRoot}}/app/main.user
+      - ssh root@{{.host}} '{{.prodRoot}}/app/main.db'
+      - ssh root@{{.host}} 'docker run --rm --network {{.network}} -v {{.prodRoot}}/app:/app -w /app golang:1.22-alpine ./main.db -f ./config/config.yaml initsuperuser'
+
+
+  ## 运维
+  # ssh client
+  sshCli:
+    interactive: true
+    cmds:
+      - ssh root@{{.host}}
+
+  prodMainLog:
+    cmds:
+      - ssh root@{{.host}} 'docker logs -n 100 -f {{.dockerName}}'
+
+  prodMainExe:
+    interactive: true
+    cmds:
+      - ssh root@{{.host}} 'docker exec -it {{.dockerName}} sh'
+

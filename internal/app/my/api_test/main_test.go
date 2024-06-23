@@ -1,33 +1,29 @@
 package api_test
 
 import (
-	"DEMOX_ADMINAUTH/internal/ctx"
-	"DEMOX_ADMINAUTH/internal/testtool"
-	"DEMOX_ADMINAUTH/internal/testtool/testctx"
+	"DEMOX_ADMINAUTH/internal/app/admin/adminmodel"
+	"DEMOX_ADMINAUTH/internal/pkg"
+	"DEMOX_ADMINAUTH/internal/pkg/dbtype"
 	"testing"
 )
 
-var SerCtx *ctx.AppContext
-var TestCtx *testctx.TestContext
-
 func TestMain(m *testing.M) {
-
-	config := testtool.NewTestConfig()
-	//单元测试并发执行 防止数据库端口冲突
-	config.Mysql.Host = "127.0.0.1:4308"
-	ctx, err := testctx.NewTestContext(config)
-	defer func() {
-		ctx.Close()
-	}()
-	if err != nil {
-		panic(err)
-	}
-
-	SerCtx, err = ctx.GetServerCtx()
-	TestCtx = ctx
-	if err != nil {
-		panic(err)
-	}
 	m.Run()
-	ctx.Close()
+}
+
+var password = "123456"
+
+func NewUser() *adminmodel.AdminPo {
+	return &adminmodel.AdminPo{
+		Base:         dbtype.Base{ID: 1},
+		Role:         "abc",
+		IsSuperAdmin: "1",
+		Password:     pkg.GetPassword(password),
+		Email:        "abc@qq.com",
+		Status:       "1",
+		Name:         "姓名",
+		Account:      "admin",
+		Phone:        "12222222222",
+		Memo:         "这是memo",
+	}
 }

@@ -6,7 +6,6 @@ import (
 	"DEMOX_ADMINAUTH/internal/ctx"
 	"DEMOX_ADMINAUTH/internal/pkg"
 	"DEMOX_ADMINAUTH/internal/pkg/api/hd"
-	"DEMOX_ADMINAUTH/internal/pkg/jwtx"
 	"DEMOX_ADMINAUTH/internal/router"
 	"context"
 	"errors"
@@ -55,8 +54,7 @@ func (this *ResetPassword) Do() error {
 }
 
 func (this *ResetPassword) ResetPassword(rawPo *adminmodel.AdminPo) (string, error) {
-
-	id, err := jwtx.GetUid(this.ctx)
+	id, err := this.appctx.GetUid(this.ctx)
 	if err != nil {
 		return "", err
 	}
@@ -78,10 +76,8 @@ func (this *ResetPassword) ResetPassword(rawPo *adminmodel.AdminPo) (string, err
 	r := this.appctx.Db.Model(po).Update("password", pwd)
 
 	//踢出在线
-	this.appctx.Redis.Del(context.Background(), mymodel.GetAdminRedisLoginId(this.appctx.Config.App.Name, int(po.ID)))
+	this.appctx.Redis.Del(context.Background(), mymodel.GetAdminRedisLoginId(int(po.ID)))
 
-	//删除刷新token
-	this.appctx.Redis.Del(context.Background(), mymodel.GetAdminRedisRefreshTokenId(this.appctx.Config.App.Name, int(po.ID)))
 	return _pwd, r.Error
 }
 

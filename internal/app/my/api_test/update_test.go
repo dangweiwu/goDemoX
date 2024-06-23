@@ -2,33 +2,63 @@ package api_test
 
 import (
 	"DEMOX_ADMINAUTH/internal/app/admin/adminmodel"
+	"DEMOX_ADMINAUTH/internal/app/my"
 	"DEMOX_ADMINAUTH/internal/app/my/mymodel"
-	"DEMOX_ADMINAUTH/internal/testtool"
-	"bytes"
-	"encoding/json"
+	"DEMOX_ADMINAUTH/internal/ctx/testapp"
+	"DEMOX_ADMINAUTH/internal/router"
+	"github.com/gin-gonic/gin"
 	"github.com/stretchr/testify/assert"
 	"testing"
 )
 
+func myupdateEnv() (*testapp.TestApp, *adminmodel.AdminPo) {
+	app, err := testapp.NewTestApp()
+	if err != nil {
+		panic(err)
+	}
+	app.RegDb(&adminmodel.AdminPo{})
+	user := NewUser()
+	app.Db.Create(user)
+	app.GetUid = func(ctx *gin.Context) (int64, error) {
+		return user.ID, nil
+	}
+	app.RegRoute(func(engine *gin.Engine) {
+		my.Route(router.NewTestBaseRouter(engine, app.AppContext), app.AppContext)
+	})
+	return app, user
+}
+
 func TestMyUpdate(t *testing.T) {
-	SerCtx.Db.Exec("DELETE FROM " + adminmodel.AdminPo{}.TableName())
-	my := testtool.NewMockUser(TestCtx).Mock().Login().SetLogCode()
-	if my.Err != nil {
-		t.Fatal(my.Err)
+	var (
+		phone = "22222222222"
+		name  = "name2"
+		Memo  = "memo2"
+		Email = "email2@qq.com"
+	)
+	app, user := myupdateEnv()
+	defer app.Close()
+
+	form := &mymodel.MyForm{Phone: phone, Name: name, Memo: Memo, Email: Email}
+	ser := app.Put("/api/my", form).Do()
+	if !assert.Equal(t, 200, ser.GetCode()) {
+		return
+	}
+	_po := &adminmodel.AdminPo{}
+	app.Db.Model(_po).Where("id=?", user.ID).Take(_po)
+
+	if !assert.Equal(t, phone, _po.Phone) {
+		return
 	}
 
-	form := &mymodel.MyForm{Phone: "12345678911", Name: "name", Memo: "memo", Email: "email@qq.com"}
-	bts, _ := json.Marshal(form)
+	if !assert.Equal(t, name, _po.Name) {
+		return
+	}
+	if !assert.Equal(t, Memo, _po.Memo) {
+		return
+	}
 
-	ser := testtool.NewTestServer(SerCtx, "PUT", "/api/my", bytes.NewBuffer(bts)).SetAuth(my.AccessToken).Do()
-
-	if assert.Equal(t, ser.GetCode(), 200, "updatemy:%d:%s", ser.GetCode(), ser.GetBody()) {
-		po := &adminmodel.AdminPo{}
-		SerCtx.Db.Where("account=?", my.Account).Take(po)
-		assert.Equal(t, form.Phone, po.Phone)
-		assert.Equal(t, form.Name, po.Name)
-		assert.Equal(t, form.Memo, po.Memo)
-		assert.Equal(t, form.Email, po.Email)
+	if !assert.Equal(t, Email, _po.Email) {
+		return
 	}
 
 }

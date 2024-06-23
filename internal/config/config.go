@@ -2,10 +2,10 @@ package config
 
 import (
 	"DEMOX_ADMINAUTH/internal/pkg/api/apiserver/apiconfig"
+	"DEMOX_ADMINAUTH/internal/pkg/db/mysqlx"
+	"DEMOX_ADMINAUTH/internal/pkg/db/redisx"
 	"DEMOX_ADMINAUTH/internal/pkg/jwtx/jwtconfig"
 	"DEMOX_ADMINAUTH/internal/pkg/logx"
-	"github.com/dangweiwu/ginpro/pkg/mysqlx/mysqlxconfig"
-	"github.com/dangweiwu/ginpro/pkg/redisx/redisconfig"
 )
 
 // 全局配置文件
@@ -13,9 +13,9 @@ type Config struct {
 	App    App
 	Api    apiconfig.ApiConfig
 	Log    logx.Config
-	Mysql  mysqlxconfig.Mysql
+	Mysql  mysqlx.Config
 	Jwt    jwtconfig.JwtConfig
-	Redis  redisconfig.RedisConfig
+	Redis  redisx.Config
 	Trace  TraceCfg
 	Metric MetricCfg
 }

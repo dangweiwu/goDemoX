@@ -6,7 +6,6 @@ import (
 	"DEMOX_ADMINAUTH/internal/ctx"
 	"DEMOX_ADMINAUTH/internal/pkg"
 	"DEMOX_ADMINAUTH/internal/pkg/api/hd"
-	"DEMOX_ADMINAUTH/internal/pkg/jwtx"
 	"DEMOX_ADMINAUTH/internal/router"
 	"context"
 	"errors"
@@ -37,7 +36,7 @@ func NewMyUpdatePwd(c *gin.Context, appctx *ctx.AppContext) router.IHandler {
 // @tbrow    |n data |e ok |c 成功 |t string
 func (this *UpdatePwd) Do() error {
 	var err error
-	uid, err := jwtx.GetUid(this.ctx)
+	uid, err := this.appctx.GetUid(this.ctx)
 
 	po := &mymodel.PasswordForm{}
 
@@ -66,6 +65,6 @@ func (this *UpdatePwd) UpdatePwd(form *mymodel.PasswordForm, id int64) error {
 	po.Password = pkg.GetPassword(form.NewPassword)
 	r := this.appctx.Db.Model(po).Select("password").Updates(po)
 
-	this.appctx.Redis.Del(context.Background(), mymodel.GetAdminRedisLoginId(this.appctx.Config.App.Name, int(po.ID)))
+	this.appctx.Redis.Del(context.Background(), mymodel.GetAdminRedisLoginId(int(po.ID)))
 	return r.Error
 }

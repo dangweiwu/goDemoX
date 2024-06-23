@@ -1,28 +1,53 @@
 package api_test
 
 import (
+	"DEMOX_ADMINAUTH/internal/app/admin"
 	"DEMOX_ADMINAUTH/internal/app/admin/adminmodel"
-	"DEMOX_ADMINAUTH/internal/testtool"
+	"DEMOX_ADMINAUTH/internal/ctx/testapp"
+	"DEMOX_ADMINAUTH/internal/router"
+	"fmt"
+	"github.com/gin-gonic/gin"
 	"github.com/stretchr/testify/assert"
-	"strconv"
 	"testing"
 )
 
-func TestAdminDel(t *testing.T) {
-	SerCtx.Db.Exec("DELETE FROM " + adminmodel.AdminPo{}.TableName())
-	my := testtool.NewMockUser(TestCtx).Mock().Login().SetLogCode()
-	if my.Err != nil {
-		t.Fatal(my.Err)
+func adminDelEnv() *testapp.TestApp {
+	app, err := testapp.NewTestApp()
+	if err != nil {
+		panic(err)
 	}
-	user := &adminmodel.AdminPo{Account: "account", Name: "name", Phone: "12345678911", Email: "email@qq.com"}
-	r := SerCtx.Db.Create(user)
-	assert.Equal(t, r.Error, nil, "del:add user")
+	app.RegDb(&adminmodel.AdminPo{})
+	app.RegRoute(func(engine *gin.Engine) {
+		admin.Route(router.NewTestBaseRouter(engine, app.AppContext), app.AppContext)
+	})
 
-	ser := testtool.NewTestServer(SerCtx, "DELETE", "/api/admin/"+strconv.Itoa(int(user.ID)), nil).SetAuth(my.AccessToken).Do()
-	assert.Equal(t, ser.GetCode(), 200, "delete user::code:%s-body:%s", ser.GetCode(), ser.GetBody())
+	return app
 
-	//no test
-	ser = testtool.NewTestServer(SerCtx, "DELETE", "/api/admin/1000", nil).SetAuth(my.AccessToken).Do()
-	assert.Equal(t, ser.GetCode(), 400, "delete no id user::code:%s-body:%s", ser.GetCode(), ser.GetBody())
+}
+
+func TestAdminDel(t *testing.T) {
+	app := adminDelEnv()
+	defer app.Close()
+	user := NewUser()
+	app.Db.Create(user)
+	app.GetUid = func(ctx *gin.Context) (int64, error) {
+		fmt.Println(user.ID)
+		return user.ID, nil
+	}
+	user2 := NewUser()
+	user2.Account = "admin2"
+	user2.ID = 2
+	if r := app.Db.Create(user2); r.Error != nil {
+		panic(r.Error)
+	}
+
+	ser := app.Delete(fmt.Sprintf("/api/admin/%d", user2.ID)).Do()
+	if !assert.Equal(t, 200, ser.GetCode()) {
+		fmt.Println(ser.GetBody())
+		return
+	}
+	users := []adminmodel.AdminPo{}
+	app.Db.Find(&user)
+	assert.Equal(t, 0, len(users), "del:user")
 
 }

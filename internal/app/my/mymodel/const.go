@@ -9,13 +9,8 @@ func GetAdminRedisId(id int) string {
 }
 
 // redis login id
-func GetAdminRedisLoginId(appName string, id int) string {
-	return appName + "lgn:" + GetAdminRedisId(id)
-}
-
-// redis login refreshtoken id
-func GetAdminRedisRefreshTokenId(appName string, id int) string {
-	return appName + "rft:" + GetAdminRedisId(id)
+func GetAdminRedisLoginId(id int) string {
+	return "lgn:" + GetAdminRedisId(id)
 }
 
 const (

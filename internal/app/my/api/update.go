@@ -4,7 +4,6 @@ import (
 	"DEMOX_ADMINAUTH/internal/app/my/mymodel"
 	"DEMOX_ADMINAUTH/internal/ctx"
 	"DEMOX_ADMINAUTH/internal/pkg/api/hd"
-	"DEMOX_ADMINAUTH/internal/pkg/jwtx"
 	"DEMOX_ADMINAUTH/internal/router"
 	"errors"
 	"github.com/gin-gonic/gin"
@@ -36,7 +35,7 @@ func NewMyUpdate(c *gin.Context, appctx *ctx.AppContext) router.IHandler {
 // @tbrow    |n data |e ok |c 成功 |t string
 func (this *MyUpdate) Do() error {
 	var err error
-	uid, err := jwtx.GetUid(this.ctx)
+	uid, err := this.appctx.GetUid(this.ctx)
 
 	po := &mymodel.MyForm{}
 

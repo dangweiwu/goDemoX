@@ -1,30 +1,25 @@
 package api_test
 
 import (
-	"DEMOX_ADMINAUTH/internal/app/admin/adminmodel"
 	"DEMOX_ADMINAUTH/internal/app/auth/authmodel"
-	"DEMOX_ADMINAUTH/internal/testtool"
 	"fmt"
 	"github.com/stretchr/testify/assert"
-	"gorm.io/gorm"
 	"testing"
 )
 
 func TestAuthDel(t *testing.T) {
-	SerCtx.Db.Exec("DELETE FROM " + authmodel.AuthPo{}.TableName())
-	SerCtx.Db.Exec("DELETE FROM " + adminmodel.AdminPo{}.TableName())
+	app := newApp()
+	defer app.Close()
 
-	my := testtool.NewMockUser(TestCtx).Mock().Login().SetLogCode()
-	if my.Err != nil {
-		t.Fatal(my.Err)
+	authpo := NewAuth()
+	app.Db.Create(authpo)
+
+	ser := app.Delete(fmt.Sprintf("/api/auth/%d", authpo.ID)).Do()
+	if !assert.Equal(t, 200, ser.GetCode(), "%d:%s", ser.GetCode(), ser.GetBody()) {
+		return
 	}
+	cnt := int64(0)
+	app.Db.Model(&authmodel.AuthPo{}).Count(&cnt)
+	assert.Equal(t, 0, int(cnt))
 
-	po1 := &authmodel.AuthPo{Name: "创建", Code: "create", OrderNum: 1001, Api: "/api/auth", Method: "POST", Kind: "0"}
-	SerCtx.Db.Create(po1)
-
-	ser := testtool.NewTestServer(SerCtx, "DELETE", fmt.Sprintf("/api/auth/%d", po1.ID), nil).SetAuth(my.AccessToken).Do()
-	if assert.Equal(t, 200, ser.GetCode(), "%d:%s", ser.GetCode(), ser.GetBody()) {
-		err := SerCtx.Db.Model(po1).Where("id=?", po1.ID).Take(po1).Error
-		assert.Equal(t, err, gorm.ErrRecordNotFound)
-	}
 }

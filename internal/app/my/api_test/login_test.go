@@ -2,68 +2,86 @@ package api_test
 
 import (
 	"DEMOX_ADMINAUTH/internal/app/admin/adminmodel"
+	"DEMOX_ADMINAUTH/internal/app/my"
 	"DEMOX_ADMINAUTH/internal/app/my/mymodel"
-	"DEMOX_ADMINAUTH/internal/pkg"
-	"DEMOX_ADMINAUTH/internal/testtool"
-	"bytes"
-	"encoding/json"
+	"DEMOX_ADMINAUTH/internal/ctx/testapp"
+	"DEMOX_ADMINAUTH/internal/pkg/jwtx"
+	"DEMOX_ADMINAUTH/internal/router"
+	"fmt"
+	"github.com/gin-gonic/gin"
 	"github.com/stretchr/testify/assert"
 	"testing"
 )
 
-func TestLogin(t *testing.T) {
-	SerCtx.Db.Exec("DELETE FROM " + adminmodel.AdminPo{}.TableName())
-	user := &adminmodel.AdminPo{
-		Account:      "admin",
-		Password:     pkg.GetPassword("123456"),
-		IsSuperAdmin: "1",
-		Status:       "1",
+func LoginInitEnv() *testapp.TestApp {
+	TestApp, err := testapp.NewTestApp()
+	if err != nil {
+		panic(err)
 	}
 
-	SerCtx.Db.Create(user)
+	//初始化数据库
+	TestApp.RegDb(&adminmodel.AdminPo{})
+	//环境设置
+	TestApp.GetUid = func(ctx *gin.Context) (int64, error) {
+		return jwtx.GetUid(ctx)
+	}
+	//注册路由
+	TestApp.RegRoute(func(engine *gin.Engine) {
+		r := router.NewTestRouter(engine, TestApp.AppContext)
+		my.Route(r, TestApp.AppContext)
+	})
 
-	form := &mymodel.LoginForm{"admin", "123456"}
-	bts, _ := json.Marshal(form)
+	return TestApp
+}
 
-	//正常登陆
-	ser := testtool.NewTestServer(SerCtx, "POST", "/api/login", bytes.NewReader(bts)).Do()
+func TestLogin(t *testing.T) {
+	fmt.Println("=============login start")
+	defer fmt.Println("end===============login")
+	user := NewUser()
+	testapp := LoginInitEnv()
+	defer testapp.Close()
+	testapp.Db.Create(user)
+
+	form := &mymodel.LoginForm{user.Account, password}
+	ser := testapp.Post("/api/login", form).Do()
 	rep := &mymodel.LogRep{}
-	json.Unmarshal([]byte(ser.GetBody()), rep)
+	ser.ResponseObj(rep)
+
 	firstAccountToken := rep.AccessToken
 
-	if assert.Equal(t, ser.GetCode(), 200, "login:%d:%s", ser.GetCode(), ser.GetBody()) {
+	if assert.Equal(t, 200, ser.GetCode(), "login:%d:%s", ser.GetCode(), ser.GetBody()) {
 		assert.NotEmpty(t, rep.AccessToken)
-		assert.NotEmpty(t, rep.RefreshAt)
+		assert.NotEmpty(t, rep.TokenExp)
 		assert.NotEmpty(t, rep.RefreshToken)
 	}
 
-	ser = testtool.NewTestServer(SerCtx, "GET", "/api/my", nil).SetAuth(rep.AccessToken).Do()
-	if assert.Equal(t, ser.GetCode(), 200, "my:info:%d:%s", ser.GetCode(), ser.GetBody()) {
-		assert.Contains(t, ser.GetBody(), "admin")
-	}
+	//正常获取我的信息
+
+	ser = testapp.Get("/api/my").SetToken(firstAccountToken).Do()
+	assert.Equal(t, 200, ser.GetCode(), "my:info:%d:%s", ser.GetCode(), ser.GetBody())
+
+	//二次登录
+	ser = testapp.Post("/api/login", form).Do()
 
 	//code失效校验
-	ser = testtool.NewTestServer(SerCtx, "POST", "/api/login", bytes.NewReader(bts)).Do()
-	rep = &mymodel.LogRep{}
-	json.Unmarshal([]byte(ser.GetBody()), rep)
-	ser = testtool.NewTestServer(SerCtx, "GET", "/api/my", nil).SetAuth(firstAccountToken).Do()
-	assert.Equal(t, ser.GetCode(), 401, "my:info:%d:%s", ser.GetCode(), ser.GetBody())
+	ser = testapp.Get("/api/my").SetToken(firstAccountToken).Do()
+	assert.Equal(t, 401, ser.GetCode(), "my:info:%d:%s", ser.GetCode(), ser.GetBody())
 
 	//token 过期校验
-	SerCtx.Config.Jwt.Exp = -20
-	ser = testtool.NewTestServer(SerCtx, "POST", "/api/login", bytes.NewReader(bts)).Do()
-	rep = &mymodel.LogRep{}
-	json.Unmarshal([]byte(ser.GetBody()), rep)
-	ser = testtool.NewTestServer(SerCtx, "GET", "/api/my", nil).SetAuth(rep.AccessToken).Do()
-	assert.Equal(t, ser.GetCode(), 401, "my:info:%d:%s", ser.GetCode(), ser.GetBody())
+	testapp.Config.Jwt.Exp = -1 //过期
+	ser = testapp.Post("/api/login", form).Do()
+	ser.ResponseObj(rep)
+	token3 := rep.AccessToken
+
+	ser = testapp.Get("/api/my").SetToken(token3).Do()
+	ser.ResponseObj(rep)
+	assert.Equal(t, 401, ser.GetCode(), "my:info:%d:%s", ser.GetCode(), ser.GetBody())
 
 	//密码错误
 	form = &mymodel.LoginForm{"admin", "123455"}
-	bts, _ = json.Marshal(form)
-	SerCtx.Config.Jwt.Exp = 100
-	ser = testtool.NewTestServer(SerCtx, "POST", "/api/login", bytes.NewReader(bts)).Do()
-	//fmt.Print(ser.GetBody())
-	if assert.Equal(t, ser.GetCode(), 400, "login:%d:%s", ser.GetCode(), ser.GetBody()) {
+	testapp.Config.Jwt.Exp = 100
+	ser = testapp.Post("/api/login", form).Do()
+	if assert.Equal(t, 400, ser.GetCode(), "login:%d:%s", ser.GetCode(), ser.GetBody()) {
 		assert.Contains(t, ser.GetBody(), "密码错误")
 	}
 }

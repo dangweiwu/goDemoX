@@ -2,26 +2,41 @@ package api_test
 
 import (
 	"DEMOX_ADMINAUTH/internal/app/sys/sysmodel"
-	"DEMOX_ADMINAUTH/internal/testtool"
-	"bytes"
-	"encoding/json"
 	"github.com/stretchr/testify/assert"
 	"testing"
 )
 
 func TestAct(t *testing.T) {
 
-	form := &sysmodel.SysActForm{}
-	form.Act = "1"
+	app := newApp()
+	defer app.Close()
+
+	form := sysmodel.SysActForm{}
 	form.Name = "trace"
-	body, _ := json.Marshal(form)
+	form.Act = "1"
 
-	ser := testtool.NewTestServer(SerCtx, "PUT", "/api/sys", bytes.NewBuffer(body)).SetBaseAuth(Name, Password).Do()
-	assert.Equal(t, 200, ser.GetCode(), "%s:%s", "act", ser.GetBody())
+	ser := app.Put("/api/sys", form).Do()
+	assert.Equal(t, 200, ser.GetCode(), ser.GetBody())
 
+	form = sysmodel.SysActForm{}
 	form.Name = "metric"
-	body, _ = json.Marshal(form)
+	form.Act = "1"
 
-	ser = testtool.NewTestServer(SerCtx, "PUT", "/api/sys", bytes.NewBuffer(body)).SetBaseAuth(Name, Password).Do()
-	assert.Equal(t, 200, ser.GetCode(), "%s:%s", "act", ser.GetBody())
+	ser = app.Put("/api/sys", form).Do()
+	assert.Equal(t, 200, ser.GetCode(), ser.GetBody())
+
+	form = sysmodel.SysActForm{}
+	form.Name = "trace"
+	form.Act = "0"
+
+	ser = app.Put("/api/sys", form).Do()
+	assert.Equal(t, 200, ser.GetCode(), ser.GetBody())
+
+	form = sysmodel.SysActForm{}
+	form.Name = "metric"
+	form.Act = "0"
+
+	ser = app.Put("/api/sys", form).Do()
+	assert.Equal(t, 200, ser.GetCode(), ser.GetBody())
+
 }

@@ -32,7 +32,7 @@ func LoginCode(appctx *ctx.AppContext) gin.HandlerFunc {
 			return
 		}
 		//fmt.Println("@@", adminmodel.GetAdminRedisLoginId(int(uid)))
-		logincode, err := appctx.Redis.Get(context.Background(), mymodel.GetAdminRedisLoginId(appctx.Config.App.Name, int(uid))).Result()
+		logincode, err := appctx.Redis.Get(context.Background(), mymodel.GetAdminRedisLoginId(int(uid))).Result()
 		if err != nil {
 			if err == redis.Nil {
 				LoginCodeErrResponse(c, err.Error()+":code")

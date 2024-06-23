@@ -25,15 +25,15 @@ func NewAdapter(db *gorm.DB) *Adapter {
 	return &Adapter{db}
 }
 
-// 加载规则
+// 加载规则 同步role中的auth信息
 func (this *Adapter) LoadPolicy(model model.Model) error {
 	pos := []authmodel.AuthPo{}
 	rolePos := []rolemodel.RolePo{}
-	if err := this.db.Where("status = '1'").Find(&rolePos).Error; err != nil {
+	if err := this.db.Where("status = '1'").Select([]string{"code", "status", "auth"}).Find(&rolePos).Error; err != nil {
 		return err
 	}
 
-	if err := this.db.Find(&pos).Error; err != nil {
+	if err := this.db.Select([]string{"code", "kind", "api", "method"}).Find(&pos).Error; err != nil {
 		return err
 	}
 	authmap := map[string]authmodel.AuthPo{}

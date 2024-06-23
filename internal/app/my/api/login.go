@@ -3,17 +3,15 @@ package api
 import (
 	"DEMOX_ADMINAUTH/internal/app/admin/adminmodel"
 	"DEMOX_ADMINAUTH/internal/app/my/mymodel"
+	"DEMOX_ADMINAUTH/internal/app/my/myserver"
 	"DEMOX_ADMINAUTH/internal/ctx"
 	"DEMOX_ADMINAUTH/internal/pkg"
 	"DEMOX_ADMINAUTH/internal/pkg/api/hd"
-	"DEMOX_ADMINAUTH/internal/pkg/jwtx"
 	"DEMOX_ADMINAUTH/internal/router"
-	"context"
 	"errors"
+	"fmt"
 	"github.com/gin-gonic/gin"
-	"github.com/google/uuid"
 	"gorm.io/gorm"
-	"strings"
 	"time"
 )
 
@@ -54,7 +52,13 @@ func (this *Login) Do() error {
 	this.Rep(data)
 	return nil
 }
-func (this *Login) Login(form *mymodel.LoginForm) (interface{}, error) {
+func (this *Login) Login(form *mymodel.LoginForm) (*mymodel.LogRep, error) {
+	var (
+		token        string
+		refreshToken string
+		logcode      string
+		err          error
+	)
 	po, err := this.Valid(form)
 	if err != nil {
 		return nil, err
@@ -65,36 +69,28 @@ func (this *Login) Login(form *mymodel.LoginForm) (interface{}, error) {
 		return nil, errors.New("密码错误")
 	}
 
-	//同时只能有一个jwt登陆，可拓展踢人功能
-	logincode, err := this.newLoginCode(po.ID)
+	logcode, err = myserver.NewLogCode(po.ID, this.appctx.Redis)
+	if err != nil {
+		fmt.Println("err====redis")
+		return nil, err
+	}
+
+	logopt := adminmodel.LoginOpt{
+		Exp:       this.appctx.Config.Jwt.Exp,
+		LoginCode: logcode,
+		Secret:    this.appctx.Config.Jwt.Secret,
+	}
+	token, refreshToken, err = po.Login(&logopt)
 	if err != nil {
 		return nil, err
 	}
 
-	now := time.Now().Unix()
-	if token, err := jwtx.GenToken(
-		this.appctx.Config.Jwt.Secret,
-		now+this.appctx.Config.Jwt.Exp,
-		now+this.appctx.Config.Jwt.Exp/2,
-		po.ID,
-		logincode,
-		po.Role,
-		po.IsSuperAdmin,
-	); err != nil {
-		return nil, this.ErrMsg("登陆失败", "jwt:"+err.Error())
-	} else {
+	return &mymodel.LogRep{
+		token,
+		time.Now().Unix() + logopt.Exp - 60,
+		refreshToken,
+	}, nil
 
-		refleshToken, err := this.newRefreshToken(po.ID)
-		if err != nil {
-			return nil, err
-		}
-		return mymodel.LogRep{
-			token,
-			now + this.appctx.Config.Jwt.Exp/2,
-			refleshToken,
-		}, nil
-
-	}
 }
 
 func (this *Login) Valid(form *mymodel.LoginForm) (*adminmodel.AdminPo, error) {
@@ -116,33 +112,4 @@ func (this *Login) Valid(form *mymodel.LoginForm) (*adminmodel.AdminPo, error) {
 	}
 
 	return po, nil
-}
-
-func (this *Login) newLoginCode(id int64) (string, error) {
-	//登陆处理
-	//登陆code 控制唯一登陆有效及踢人
-	var logincode string
-	if logincode = uuid.New().String(); logincode == "" {
-		return "", this.ErrMsg("logincode is empty", "登陆失败")
-	} else {
-		logincode = strings.Split(logincode, "-")[0]
-		if r := this.appctx.Redis.Set(context.Background(), mymodel.GetAdminRedisLoginId(this.appctx.Config.App.Name, int(id)), logincode, 0); r.Err() != nil {
-			return "", this.ErrMsg("redis:"+r.Err().Error(), "登陆失败")
-		}
-	}
-	return logincode, nil
-}
-
-// 刷新token生成
-func (this *Login) newRefreshToken(id int64) (string, error) {
-	var refreshToken string
-	if refreshToken = uuid.New().String(); refreshToken == "" {
-		return "", this.ErrMsg("登陆失败", "refreshToken is empty")
-	} else {
-		if r := this.appctx.Redis.Set(context.Background(), mymodel.GetAdminRedisRefreshTokenId(this.appctx.Config.App.Name, int(id)), refreshToken, time.Second*time.Duration(this.appctx.Config.Jwt.Exp)); r.Err() != nil {
-			return "", this.ErrMsg("redis:"+r.Err().Error(), "登陆失败")
-		} else {
-			return refreshToken, nil
-		}
-	}
 }

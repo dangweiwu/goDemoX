@@ -1,38 +1,34 @@
 package api_test
 
 import (
-	"DEMOX_ADMINAUTH/internal/app/admin/adminmodel"
 	"DEMOX_ADMINAUTH/internal/app/role/rolemodel"
-	"DEMOX_ADMINAUTH/internal/testtool"
-	"bytes"
-	"encoding/json"
+	"fmt"
 	"github.com/stretchr/testify/assert"
 	"testing"
 )
 
 func TestCreateRole(t *testing.T) {
-	SerCtx.Db.Exec("DELETE FROM " + adminmodel.AdminPo{}.TableName())
-	SerCtx.Db.Exec("DELETE FROM " + rolemodel.RolePo{}.TableName())
-	my := testtool.NewMockUser(TestCtx).Mock().Login().SetLogCode()
-	if my.Err != nil {
-		t.Fatal(my.Err)
-	}
 
+	app := newApp()
+	defer app.Close()
 	form := &rolemodel.RoleForm{Code: "admin", Name: "系统管理员", OrderNum: 1, Status: "1", Memo: "this is memo"}
-	body, _ := json.Marshal(form)
-	ser := testtool.NewTestServer(SerCtx, "POST", "/api/role", bytes.NewBuffer(body)).SetAuth(my.AccessToken).Do()
-	if assert.Equal(t, 200, ser.GetCode(), "%d:%s", ser.GetCode(), ser.GetBody()) {
-		po := &rolemodel.RolePo{}
-		SerCtx.Db.Where("code=?", form.Code).Take(po)
-		assert.Equal(t, po.Name, form.Name)
-		assert.Equal(t, po.Status, form.Status)
-		assert.Equal(t, po.OrderNum, form.OrderNum)
-		assert.Equal(t, po.Code, form.Code)
-		assert.Equal(t, po.Memo, form.Memo)
-	}
+	ser := app.Post("/api/role", form).Do()
 
-	ser = testtool.NewTestServer(SerCtx, "POST", "/api/role", bytes.NewBuffer(body)).SetAuth(my.AccessToken).Do()
+	if !assert.Equal(t, 200, ser.GetCode()) {
+		fmt.Println(ser.GetBody())
+	}
+	po := &rolemodel.RolePo{}
+	app.Db.Where("code=?", form.Code).Take(po)
+	assert.Equal(t, po.Name, form.Name)
+	assert.Equal(t, po.Status, form.Status)
+	assert.Equal(t, po.OrderNum, form.OrderNum)
+	assert.Equal(t, po.Code, form.Code)
+	assert.Equal(t, po.Memo, form.Memo)
+
+	ser = app.Post("/api/role", form).Do()
+
 	if assert.Equal(t, 400, ser.GetCode(), "%d:%s", ser.GetCode(), ser.GetBody()) {
 		assert.Contains(t, ser.GetBody(), "角色编码已存在")
 	}
+
 }

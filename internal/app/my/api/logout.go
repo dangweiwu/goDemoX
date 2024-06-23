@@ -4,7 +4,6 @@ import (
 	"DEMOX_ADMINAUTH/internal/app/my/mymodel"
 	"DEMOX_ADMINAUTH/internal/ctx"
 	"DEMOX_ADMINAUTH/internal/pkg/api/hd"
-	"DEMOX_ADMINAUTH/internal/pkg/jwtx"
 	"DEMOX_ADMINAUTH/internal/router"
 	"context"
 	"github.com/gin-gonic/gin"
@@ -38,14 +37,11 @@ func (this *LogOut) Do() error {
 
 func (this *LogOut) Logout() error {
 	//获取id
-	id, err := jwtx.GetUid(this.ctx)
+	id, err := this.appctx.GetUid(this.ctx)
 	if err != nil {
 		return nil
 	}
 	//删除logincode
-	this.appctx.Redis.Del(context.Background(), mymodel.GetAdminRedisLoginId(this.appctx.Config.App.Name, int(id)))
-
-	//删除刷新token
-	this.appctx.Redis.Del(context.Background(), mymodel.GetAdminRedisRefreshTokenId(this.appctx.Config.App.Name, int(id)))
+	this.appctx.Redis.Del(context.Background(), mymodel.GetAdminRedisLoginId(int(id)))
 	return nil
 }

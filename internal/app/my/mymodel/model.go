@@ -47,7 +47,7 @@ type LoginForm struct {
 // @doc | mymodel.LogRep
 type LogRep struct {
 	AccessToken  string `json:"access_token" doc:"|d 鉴权token |c header头Authorization参数"`
-	RefreshAt    int64  `json:"refresh_at" doc:"|d 刷新时间戳 |c 到达时间戳时间进行token刷新"`
+	TokenExp     int64  `json:"token_exp" doc:"|d 刷新时间戳 |c token有效期"`
 	RefreshToken string `json:"refresh_token" doc:"|d 刷新token |c 刷新token时所用参数"`
 }
 

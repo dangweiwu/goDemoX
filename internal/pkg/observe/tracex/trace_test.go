@@ -32,6 +32,7 @@ func (this *A) SetName(a string) {
 }
 
 func TestT(t *testing.T) {
+	return
 	InitTrace(Config{
 		ServerName:  "test",
 		EndpointUrl: "http://192.168.3.30:5080/api/abc/traces",

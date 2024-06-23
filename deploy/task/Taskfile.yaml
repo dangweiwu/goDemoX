@@ -1,0 +1,71 @@
+# task
+version: '3'
+
+vars:
+  host: "156.238.224.117"
+tasks:
+
+  sshRsaPub:
+    ## ssh免密公钥同步
+    #公钥部署
+    vars:
+      gitbashexe: "D:/app/gitbash/Git/git-bash.exe"
+    cmds:
+      - "{{.gitbashexe}} -l -c 'ssh-copy-id -i ~/.ssh/id_rsa.pub root@{{.host}}'"
+
+
+  deployProdDocker:
+    ## centos7 部署docker docker-compose
+    # https://docs.docker.com/engine/install/centos/
+    cmds:
+      - ssh root@{{.host}} 'cat /etc/os-release' #查看系统信息
+      - >-
+        ssh root@{{.host}} 'sudo yum remove docker docker-client docker-client-latest 
+        docker-common docker-latest docker-latest-logrotate docker-logrotate docker-engine'
+      - ssh root@{{.host}} 'sudo yum update -y'
+      - ssh root@{{.host}} 'sudo yum install -y yum-utils'
+      - ssh root@{{.host}} 'sudo yum-config-manager --add-repo https://download.docker.com/linux/centos/docker-ce.repo'
+      - ssh root@{{.host}} 'sudo yum install -y docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose-plugin'
+      - ssh root@{{.host}} 'sudo systemctl start docker'
+      - ssh root@{{.host}} 'sudo docker run hello-world'
+
+  saveProdImages:
+    ## 保存镜像
+    dir: ./images
+    cmds:
+      - docker save -o golang-1.22.tar golang:1.22-alpine
+      - docker save -o mysql-8.0.32.tar mysql:8.0.32
+      - docker save -o redis-7.2.0.tar redis:7.2.0
+      - docker save -o phpmyadmin-5.2.1.tar phpmyadmin:5.2.1
+      - docker save -o phpredisadmin.tar erikdubbelboer/phpredisadmin
+
+  loadProdImages:
+    ## 安装镜像
+    dir: ./images
+    vars:
+      imagesDir: "/root/DEMOX_ADMINAUTH/images"
+    cmds:
+      - ssh root@{{.host}} 'mkdir -p {{.imagesDir}}'
+      - scp  *.tar root@{{.host}}:{{.imagesDir}}
+      - >
+        ssh root@{{.host}} 'cd {{.imagesDir}} &&
+        docker load -i golang-1.22.tar &&
+        docker load -i mysql-8.0.32.tar &&
+        docker load -i redis-7.2.0.tar &&
+        docker load -i phpmyadmin-5.2.1.tar &&
+        docker load -i phpredisadmin.tar
+
+  openObserve:
+    #可观测性
+    - >
+      ssh root@{{.host}} '
+      docker run -v /root/openobserve:/data 
+      -p 8080:5080
+      -e ZO_DATA_DIR="/data" 
+      -e ZO_ROOT_USER_EMAIL="root@qq.com" 
+      -e ZO_ROOT_USER_PASSWORD="a12346" 
+      -d
+      --name openobserve
+      public.ecr.aws/zinclabs/openobserve:v0.10.7'
+
+

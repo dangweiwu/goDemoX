@@ -4,7 +4,6 @@ import (
 	"DEMOX_ADMINAUTH/internal/app/admin/adminmodel"
 	"DEMOX_ADMINAUTH/internal/ctx"
 	"DEMOX_ADMINAUTH/internal/pkg/api/hd"
-	"DEMOX_ADMINAUTH/internal/pkg/jwtx"
 	"DEMOX_ADMINAUTH/internal/router"
 	"errors"
 	"github.com/gin-gonic/gin"
@@ -40,7 +39,7 @@ func (this *AdminDel) Do() error {
 		return err
 	}
 
-	uid, err := jwtx.GetUid(this.ctx)
+	uid, err := this.appctx.GetUid(this.ctx)
 	if err != nil {
 		return err
 	}

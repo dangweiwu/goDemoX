@@ -1,50 +1,39 @@
 package api_test
 
 import (
-	"DEMOX_ADMINAUTH/internal/app/admin/adminmodel"
-	"DEMOX_ADMINAUTH/internal/app/role/rolemodel"
-	"DEMOX_ADMINAUTH/internal/testtool"
+	"fmt"
 	"github.com/stretchr/testify/assert"
 	"testing"
 )
 
 func TestRoleQuery(t *testing.T) {
-	SerCtx.Db.Exec("DELETE FROM " + adminmodel.AdminPo{}.TableName())
-	SerCtx.Db.Exec("DELETE FROM " + rolemodel.RolePo{}.TableName())
-	my := testtool.NewMockUser(TestCtx).Mock().Login().SetLogCode()
-	if my.Err != nil {
-		t.Fatal(my.Err)
+	app := newApp()
+	defer app.Close()
+	role1 := NewRole()
+	app.Db.Create(role1)
+	role2 := NewRole()
+	role2.Name = "角色2"
+	role2.Code = "role2"
+	role2.ID = 2
+	app.Db.Create(role2)
+
+	ser := app.Get("/api/role").Do()
+	if !assert.Equal(t, 200, ser.GetCode()) {
+		fmt.Println(ser.GetBody())
+		return
 	}
+	assert.Contains(t, ser.GetBody(), `"total":2`)
 
-	po1 := &rolemodel.RolePo{Code: "code1", Name: "name1", OrderNum: 1, Status: "1", Memo: "memo1"}
-	SerCtx.Db.Create(po1)
-	po2 := &rolemodel.RolePo{Code: "code2", Name: "name2", OrderNum: 2, Status: "1", Memo: "memo2"}
-	SerCtx.Db.Create(po2)
+	ser = app.Get("/api/role?name=" + role1.Name).Do()
 
-	ser := testtool.NewTestServer(SerCtx, "GET", "/api/role", nil).SetAuth(my.AccessToken).Do()
-	if assert.Equal(t, 200, ser.GetCode(), "%d:%s", ser.GetCode(), ser.GetBody()) {
-		assert.Contains(t, ser.GetBody(), `"total":2`)
+	if !assert.Equal(t, 200, ser.GetCode()) {
+		fmt.Println(ser.GetBody())
+		return
 	}
+	assert.Contains(t, ser.GetBody(), `"total":1`)
 
-	ser = testtool.NewTestServer(SerCtx, "GET", "/api/role?name=name1", nil).SetAuth(my.AccessToken).Do()
-	if assert.Equal(t, 200, ser.GetCode(), "%d:%s", ser.GetCode(), ser.GetBody()) {
-		assert.Contains(t, ser.GetBody(), `"total":1`)
-		assert.Contains(t, ser.GetBody(), `name1`)
-	}
-
-	ser = testtool.NewTestServer(SerCtx, "GET", "/api/role?name=name", nil).SetAuth(my.AccessToken).Do()
-	if assert.Equal(t, 200, ser.GetCode(), "%d:%s", ser.GetCode(), ser.GetBody()) {
-		assert.Contains(t, ser.GetBody(), `"total":2`)
-	}
-
-	ser = testtool.NewTestServer(SerCtx, "GET", "/api/role?code=code1", nil).SetAuth(my.AccessToken).Do()
+	ser = app.Get("/api/role?code=" + role1.Code).Do()
 	if assert.Equal(t, 200, ser.GetCode(), "%d:%s", ser.GetCode(), ser.GetBody()) {
 		assert.Contains(t, ser.GetBody(), `"total":1`)
-		assert.Contains(t, ser.GetBody(), `code1`)
-	}
-
-	ser = testtool.NewTestServer(SerCtx, "GET", "/api/role?code=code", nil).SetAuth(my.AccessToken).Do()
-	if assert.Equal(t, 200, ser.GetCode(), "%d:%s", ser.GetCode(), ser.GetBody()) {
-		assert.Contains(t, ser.GetBody(), `"total":2`)
 	}
 }

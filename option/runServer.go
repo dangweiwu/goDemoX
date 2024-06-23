@@ -62,7 +62,7 @@ func (this *RunServe) Execute(args []string) error {
 		logx.Msg("metric启动").Info(appctx.Log)
 	}
 
-	//中间件
+	//中间件 全局
 	apiserver.RegMiddler(engine,
 		apiserver.WithStatic("/view", c.Api.ViewDir),
 		apiserver.WithMiddle(middler.RegMiddler(appctx)...),
@@ -77,7 +77,11 @@ func (this *RunServe) Execute(args []string) error {
 	//启动
 	apiserver.Run(engine, appctx.Log, c.Api)
 
-	//结束
+	//可观测性结束
 	tracex.Stop()
+	metricx.Stop()
+
+	//结束
+	appctx.Close()
 	return nil
 }

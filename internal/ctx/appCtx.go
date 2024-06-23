@@ -3,9 +3,9 @@ package ctx
 import (
 	"DEMOX_ADMINAUTH/internal/app/auth/authcheck"
 	"DEMOX_ADMINAUTH/internal/config"
+	"DEMOX_ADMINAUTH/internal/pkg/db/mysqlx"
+	"DEMOX_ADMINAUTH/internal/pkg/db/redisx"
 	"DEMOX_ADMINAUTH/internal/pkg/logx"
-	"github.com/dangweiwu/ginpro/pkg/mysqlx"
-	"github.com/dangweiwu/ginpro/pkg/redisx"
 	"github.com/go-redis/redis/v8"
 	errs "github.com/pkg/errors"
 	"go.uber.org/zap"
@@ -21,6 +21,7 @@ type AppContext struct {
 	Db        *gorm.DB
 	Redis     *redis.Client
 	AuthCheck *authcheck.AuthCheck
+	SelfCtxI
 }
 
 func NewAppContext(c config.Config) (*AppContext, error) {
@@ -28,6 +29,7 @@ func NewAppContext(c config.Config) (*AppContext, error) {
 	appctx := &AppContext{}
 	appctx.StartTime = time.Now()
 	appctx.Config = c
+	appctx.SelfCtxI = NewSelfCtx(appctx)
 
 	if lg, err := logx.New(c.Log); err != nil {
 		return nil, err
@@ -36,20 +38,18 @@ func NewAppContext(c config.Config) (*AppContext, error) {
 	}
 
 	//初始化数据库
-	db := mysqlx.NewDb(c.Mysql)
-	if d, err := db.GetDb(); err != nil {
+	if db, err := mysqlx.NewDb(c.Mysql); err != nil {
 		return nil, errs.WithMessage(err, "err init db")
 	} else {
-		d.Debug()
-		appctx.Db = d
+		appctx.Db = db.GetDb()
 		logx.Msg("数据库链接成功").Info(appctx.Log)
 	}
 
 	//初始化redis
-	if redisCli, err := redisx.NewRedis(c.Redis).GetDb(); err != nil {
+	if redisCli, err := redisx.NewRedis(c.Redis); err != nil {
 		return nil, errs.WithMessage(err, "err init redis")
 	} else {
-		appctx.Redis = redisCli
+		appctx.Redis = redisCli.GetDb()
 		logx.Msg("redis链接成功").Info(appctx.Log)
 	}
 
@@ -61,20 +61,6 @@ func NewAppContext(c config.Config) (*AppContext, error) {
 		logx.Msg("casbin初始化完毕").Info(appctx.Log)
 
 	}
-
-	//追踪启动
-	//if c.Trace.Enable {
-	//	appctx.Tracer.SetEnable(true)
-	//} else {
-	//	appctx.Tracer.SetEnable(false)
-	//}
-	//
-	////指标采集启动
-	//if c.Prom.Enable {
-	//	metric.SetEnable(true)
-	//} else {
-	//	metric.SetEnable(false)
-	//}
 
 	return appctx, nil
 }

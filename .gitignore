@@ -4,4 +4,7 @@ go.mod
 go.sum
 .idea/
 *.zip
-deploy/docker_compose/data/
+deploy/*/data/
+deploy/*/images
+cover.out
+cover.html

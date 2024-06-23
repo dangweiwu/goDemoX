@@ -5,7 +5,6 @@ import (
 	"DEMOX_ADMINAUTH/internal/app/role/rolemodel"
 	"DEMOX_ADMINAUTH/internal/ctx"
 	"DEMOX_ADMINAUTH/internal/pkg/api/hd"
-	"DEMOX_ADMINAUTH/internal/pkg/jwtx"
 	"DEMOX_ADMINAUTH/internal/router"
 	"context"
 	"encoding/json"
@@ -42,7 +41,7 @@ func NewMyAuth(c *gin.Context, appctx *ctx.AppContext) router.IHandler {
 // @tbrow |n msg |e 角色不存在
 func (this *MyAuth) Do() error {
 
-	roleCode, err := jwtx.GetRole(this.ctx)
+	roleCode, err := this.appctx.GetRole(this.ctx)
 	if err != nil {
 		return err
 	}

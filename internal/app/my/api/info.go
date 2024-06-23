@@ -4,7 +4,6 @@ import (
 	"DEMOX_ADMINAUTH/internal/app/my/mymodel"
 	"DEMOX_ADMINAUTH/internal/ctx"
 	"DEMOX_ADMINAUTH/internal/pkg/api/hd"
-	"DEMOX_ADMINAUTH/internal/pkg/jwtx"
 	"DEMOX_ADMINAUTH/internal/router"
 	"errors"
 	"github.com/gin-gonic/gin"
@@ -32,7 +31,7 @@ func NewMyInfo(c *gin.Context, appctx *ctx.AppContext) router.IHandler {
 // @response | mymodel.MyInfo | 200 Response
 func (this *MyInfo) Do() error {
 
-	uid, err := jwtx.GetUid(this.ctx)
+	uid, err := this.appctx.GetUid(this.ctx)
 	if err != nil {
 		return err
 	}

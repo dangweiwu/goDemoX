@@ -5,12 +5,10 @@ import (
 	"DEMOX_ADMINAUTH/internal/app/my/mymodel"
 	"DEMOX_ADMINAUTH/internal/ctx"
 	"DEMOX_ADMINAUTH/internal/pkg/api/hd"
-	"DEMOX_ADMINAUTH/internal/pkg/jwtx"
 	"DEMOX_ADMINAUTH/internal/router"
 	"context"
 	"errors"
 	"github.com/gin-gonic/gin"
-	errs "github.com/pkg/errors"
 	"gorm.io/gorm"
 )
 
@@ -63,7 +61,7 @@ func (this *AdminUpdate) Update(po *adminmodel.AdminUpdateForm) error {
 			return r.Error
 		}
 	}
-	uid, err := jwtx.GetUid(this.ctx)
+	uid, err := this.appctx.GetUid(this.ctx)
 	if err != nil {
 		return err
 	}
@@ -85,29 +83,30 @@ func (this *AdminUpdate) Update(po *adminmodel.AdminUpdateForm) error {
 	}
 	//修改人员下线
 	if (tmpPo.Status == "1" && po.Status == "0") || tmpPo.Role != po.Role {
-		this.appctx.Redis.Del(context.Background(), mymodel.GetAdminRedisLoginId(this.appctx.Config.App.Name, int(tmpPo.ID)))
+		this.appctx.Redis.Del(context.Background(), mymodel.GetAdminRedisLoginId(int(tmpPo.ID)))
 	}
 
 	return nil
 }
 
-func (this *AdminUpdate) Valid(po *adminmodel.AdminUpdateForm) error {
-	var ct = int64(0)
-	if po.Phone != "" {
-		if r := this.appctx.Db.Model(po).Where("id != ? and phone = ? ", po.ID, po.Phone).Count(&ct); r.Error != nil {
-			return errs.WithMessage(r.Error, "校验失败")
-		} else if ct != 0 {
-			return errors.New("手机号已存在")
-		}
-	}
-
-	if po.Email != "" {
-		if r := this.appctx.Db.Model(po).Where("id != ? and email = ?", po.ID, po.Email).Count(&ct); r.Error != nil {
-			return errs.WithMessage(r.Error, "校验失败")
-		} else if ct != 0 {
-			return errors.New("Email已存在")
-		}
-	}
-
-	return nil
-}
+//
+//func (this *AdminUpdate) Valid(po *adminmodel.AdminUpdateForm) error {
+//	var ct = int64(0)
+//	if po.Phone != "" {
+//		if r := this.appctx.Db.Model(po).Where("id != ? and phone = ? ", po.ID, po.Phone).Count(&ct); r.Error != nil {
+//			return errs.WithMessage(r.Error, "校验失败")
+//		} else if ct != 0 {
+//			return errors.New("手机号已存在")
+//		}
+//	}
+//
+//	if po.Email != "" {
+//		if r := this.appctx.Db.Model(po).Where("id != ? and email = ?", po.ID, po.Email).Count(&ct); r.Error != nil {
+//			return errs.WithMessage(r.Error, "校验失败")
+//		} else if ct != 0 {
+//			return errors.New("Email已存在")
+//		}
+//	}
+//
+//	return nil
+//}

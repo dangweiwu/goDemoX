@@ -11,7 +11,6 @@ import (
 // jwt生成
 const (
 	Code    = "code"
-	Fresh   = "fresh"
 	Uid     = "uid"
 	Role    = "role"
 	IsSuper = "super"
@@ -25,7 +24,7 @@ uid 用户id
 code 登陆id
 fresh 刷新时间
 */
-func GenToken(secretKey string, exp, fresh, uid int64, code, role, isSuper string) (string, error) {
+func GenToken(secretKey string, exp, uid int64, code, role, isSuper string) (string, error) {
 	claims := make(jwt.MapClaims) //数据仓声明
 	now := time.Now().Unix()
 
@@ -33,7 +32,6 @@ func GenToken(secretKey string, exp, fresh, uid int64, code, role, isSuper strin
 	claims["iat"] = now
 	claims[Uid] = uid
 	claims[Code] = code
-	claims[Fresh] = fresh
 	claims[Role] = role
 	claims[IsSuper] = isSuper
 	token := jwt.New(jwt.SigningMethodHS256) //token对象
