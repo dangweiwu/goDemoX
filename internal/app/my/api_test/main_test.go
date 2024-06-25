@@ -1,9 +1,9 @@
 package api_test
 
 import (
-	"DEMOX_ADMINAUTH/internal/app/admin/adminmodel"
-	"DEMOX_ADMINAUTH/internal/pkg"
-	"DEMOX_ADMINAUTH/internal/pkg/dbtype"
+	"goDemoX/internal/app/admin/adminmodel"
+	"goDemoX/internal/pkg"
+	"goDemoX/internal/pkg/dbtype"
 	"testing"
 )
 

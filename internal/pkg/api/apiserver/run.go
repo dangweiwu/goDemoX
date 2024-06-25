@@ -1,9 +1,9 @@
 package apiserver
 
 import (
-	"DEMOX_ADMINAUTH/internal/pkg/api/apiserver/apiconfig"
 	"github.com/gin-gonic/gin"
 	"go.uber.org/zap"
+	"goDemoX/internal/pkg/api/apiserver/apiconfig"
 	"os"
 	"os/signal"
 	"syscall"

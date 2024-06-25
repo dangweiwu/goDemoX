@@ -1,8 +1,8 @@
 package api_test
 
 import (
-	"DEMOX_ADMINAUTH/internal/pkg/fullurl"
 	"github.com/stretchr/testify/assert"
+	"goDemoX/internal/pkg/fullurl"
 	"testing"
 )
 

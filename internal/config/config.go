@@ -1,11 +1,11 @@
 package config
 
 import (
-	"DEMOX_ADMINAUTH/internal/pkg/api/apiserver/apiconfig"
-	"DEMOX_ADMINAUTH/internal/pkg/db/mysqlx"
-	"DEMOX_ADMINAUTH/internal/pkg/db/redisx"
-	"DEMOX_ADMINAUTH/internal/pkg/jwtx/jwtconfig"
-	"DEMOX_ADMINAUTH/internal/pkg/logx"
+	"goDemoX/internal/pkg/api/apiserver/apiconfig"
+	"goDemoX/internal/pkg/db/mysqlx"
+	"goDemoX/internal/pkg/db/redisx"
+	"goDemoX/internal/pkg/jwtx/jwtconfig"
+	"goDemoX/internal/pkg/logx"
 )
 
 // 全局配置文件

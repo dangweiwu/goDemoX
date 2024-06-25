@@ -1,8 +1,8 @@
 package ctx
 
 import (
-	"DEMOX_ADMINAUTH/internal/pkg/jwtx"
 	"github.com/gin-gonic/gin"
+	"goDemoX/internal/pkg/jwtx"
 )
 
 type SelfCtxI interface {

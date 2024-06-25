@@ -1,7 +1,7 @@
 package rolemodel
 
 import (
-	"DEMOX_ADMINAUTH/internal/pkg/dbtype"
+	"goDemoX/internal/pkg/dbtype"
 )
 
 // @doc|rolemodel.RolePo

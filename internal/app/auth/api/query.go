@@ -1,11 +1,11 @@
 package api
 
 import (
-	"DEMOX_ADMINAUTH/internal/app/auth/authmodel"
-	"DEMOX_ADMINAUTH/internal/ctx"
-	"DEMOX_ADMINAUTH/internal/pkg/api/hd"
-	"DEMOX_ADMINAUTH/internal/router"
 	"github.com/gin-gonic/gin"
+	"goDemoX/internal/app/auth/authmodel"
+	"goDemoX/internal/ctx"
+	"goDemoX/internal/pkg/api/hd"
+	"goDemoX/internal/router"
 )
 
 type AuthQuery struct {

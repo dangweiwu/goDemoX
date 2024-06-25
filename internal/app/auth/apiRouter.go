@@ -1,9 +1,9 @@
 package auth
 
 import (
-	"DEMOX_ADMINAUTH/internal/app/auth/api"
-	"DEMOX_ADMINAUTH/internal/ctx"
-	"DEMOX_ADMINAUTH/internal/router"
+	"goDemoX/internal/app/auth/api"
+	"goDemoX/internal/ctx"
+	"goDemoX/internal/router"
 )
 
 // @group | auth | 4 | 权限管理

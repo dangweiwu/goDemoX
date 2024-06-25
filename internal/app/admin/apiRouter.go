@@ -1,10 +1,10 @@
 package admin
 
 import (
-	"DEMOX_ADMINAUTH/internal/app/admin/api"
-	"DEMOX_ADMINAUTH/internal/ctx"
-	"DEMOX_ADMINAUTH/internal/middler/observe"
-	"DEMOX_ADMINAUTH/internal/router"
+	"goDemoX/internal/app/admin/api"
+	"goDemoX/internal/ctx"
+	"goDemoX/internal/middler/observe"
+	"goDemoX/internal/router"
 )
 
 // @group | admin | 1 | 用户管理 | 系统用户管理 增删查改

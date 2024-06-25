@@ -1,10 +1,10 @@
 package router
 
 import (
-	"DEMOX_ADMINAUTH/internal/ctx"
-	"DEMOX_ADMINAUTH/internal/middler"
-	"DEMOX_ADMINAUTH/internal/pkg/api/hd"
 	"github.com/gin-gonic/gin"
+	"goDemoX/internal/ctx"
+	"goDemoX/internal/middler"
+	"goDemoX/internal/pkg/api/hd"
 )
 
 /**

@@ -1,10 +1,10 @@
 package ctx
 
 import (
-	"DEMOX_ADMINAUTH/internal/config"
-	"DEMOX_ADMINAUTH/internal/pkg/db/mysqlx"
-	"DEMOX_ADMINAUTH/internal/pkg/logx"
 	errs "github.com/pkg/errors"
+	"goDemoX/internal/config"
+	"goDemoX/internal/pkg/db/mysqlx"
+	"goDemoX/internal/pkg/logx"
 )
 
 func NewDbContext(c config.Config) (*AppContext, error) {

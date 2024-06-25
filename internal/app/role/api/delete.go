@@ -1,12 +1,12 @@
 package api
 
 import (
-	"DEMOX_ADMINAUTH/internal/app/role/rolemodel"
-	"DEMOX_ADMINAUTH/internal/ctx"
-	"DEMOX_ADMINAUTH/internal/pkg/api/hd"
-	"DEMOX_ADMINAUTH/internal/router"
 	"errors"
 	"github.com/gin-gonic/gin"
+	"goDemoX/internal/app/role/rolemodel"
+	"goDemoX/internal/ctx"
+	"goDemoX/internal/pkg/api/hd"
+	"goDemoX/internal/router"
 	"gorm.io/gorm"
 )
 

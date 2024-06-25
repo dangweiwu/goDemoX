@@ -1,9 +1,9 @@
 package role
 
 import (
-	"DEMOX_ADMINAUTH/internal/app/role/api"
-	"DEMOX_ADMINAUTH/internal/ctx"
-	"DEMOX_ADMINAUTH/internal/router"
+	"goDemoX/internal/app/role/api"
+	"goDemoX/internal/ctx"
+	"goDemoX/internal/router"
 )
 
 // @group | role | 5 | 角色管理

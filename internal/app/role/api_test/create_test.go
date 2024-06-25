@@ -1,9 +1,9 @@
 package api_test
 
 import (
-	"DEMOX_ADMINAUTH/internal/app/role/rolemodel"
 	"fmt"
 	"github.com/stretchr/testify/assert"
+	"goDemoX/internal/app/role/rolemodel"
 	"testing"
 )
 

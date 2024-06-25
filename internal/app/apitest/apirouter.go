@@ -1,10 +1,10 @@
 package apitest
 
 import (
-	"DEMOX_ADMINAUTH/internal/app/apitest/api"
-	"DEMOX_ADMINAUTH/internal/ctx"
-	"DEMOX_ADMINAUTH/internal/middler/observe"
-	"DEMOX_ADMINAUTH/internal/router"
+	"goDemoX/internal/app/apitest/api"
+	"goDemoX/internal/ctx"
+	"goDemoX/internal/middler/observe"
+	"goDemoX/internal/router"
 )
 
 // @group | apitest | 20 | test | 测试api

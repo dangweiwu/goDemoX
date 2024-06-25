@@ -1,9 +1,9 @@
 package middler
 
 import (
-	"DEMOX_ADMINAUTH/internal/ctx"
 	"github.com/dangweiwu/ginpro/pkg/metric"
 	"github.com/gin-gonic/gin"
+	"goDemoX/internal/ctx"
 	"strconv"
 	"time"
 )

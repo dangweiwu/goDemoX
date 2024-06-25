@@ -1,10 +1,10 @@
 package my
 
 import (
-	"DEMOX_ADMINAUTH/internal/app/my/api"
-	"DEMOX_ADMINAUTH/internal/ctx"
-	"DEMOX_ADMINAUTH/internal/middler/observe"
-	"DEMOX_ADMINAUTH/internal/router"
+	"goDemoX/internal/app/my/api"
+	"goDemoX/internal/ctx"
+	"goDemoX/internal/middler/observe"
+	"goDemoX/internal/router"
 )
 
 // @group | me | 2 | 系统我的 | 包括基本信息获取修改 登录登出 token刷新

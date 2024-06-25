@@ -1,17 +1,17 @@
 package option
 
 import (
-	"DEMOX_ADMINAUTH/internal/app"
-	"DEMOX_ADMINAUTH/internal/config"
-	"DEMOX_ADMINAUTH/internal/ctx"
-	"DEMOX_ADMINAUTH/internal/middler"
-	"DEMOX_ADMINAUTH/internal/pkg/api/apiserver"
-	"DEMOX_ADMINAUTH/internal/pkg/fullurl"
-	"DEMOX_ADMINAUTH/internal/pkg/logx"
-	"DEMOX_ADMINAUTH/internal/pkg/observe/metricx"
-	"DEMOX_ADMINAUTH/internal/pkg/observe/tracex"
 	"github.com/dangweiwu/ginpro/pkg/yamconfig"
 	"github.com/gin-gonic/gin"
+	"goDemoX/internal/app"
+	"goDemoX/internal/config"
+	"goDemoX/internal/ctx"
+	"goDemoX/internal/middler"
+	"goDemoX/internal/pkg/api/apiserver"
+	"goDemoX/internal/pkg/fullurl"
+	"goDemoX/internal/pkg/logx"
+	"goDemoX/internal/pkg/observe/metricx"
+	"goDemoX/internal/pkg/observe/tracex"
 )
 
 type RunServe struct {

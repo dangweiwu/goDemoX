@@ -1,15 +1,15 @@
 package api_test
 
 import (
-	"DEMOX_ADMINAUTH/internal/app/admin/adminmodel"
-	"DEMOX_ADMINAUTH/internal/app/my"
-	"DEMOX_ADMINAUTH/internal/app/my/mymodel"
-	"DEMOX_ADMINAUTH/internal/ctx/testapp"
-	"DEMOX_ADMINAUTH/internal/pkg"
-	"DEMOX_ADMINAUTH/internal/router"
 	"fmt"
 	"github.com/gin-gonic/gin"
 	"github.com/stretchr/testify/assert"
+	"goDemoX/internal/app/admin/adminmodel"
+	"goDemoX/internal/app/my"
+	"goDemoX/internal/app/my/mymodel"
+	"goDemoX/internal/ctx/testapp"
+	"goDemoX/internal/pkg"
+	"goDemoX/internal/router"
 	"testing"
 )
 

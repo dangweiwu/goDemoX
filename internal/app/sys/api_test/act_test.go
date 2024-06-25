@@ -1,8 +1,8 @@
 package api_test
 
 import (
-	"DEMOX_ADMINAUTH/internal/app/sys/sysmodel"
 	"github.com/stretchr/testify/assert"
+	"goDemoX/internal/app/sys/sysmodel"
 	"testing"
 )
 

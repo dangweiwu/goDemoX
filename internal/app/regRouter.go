@@ -1,15 +1,15 @@
 package app
 
 import (
-	"DEMOX_ADMINAUTH/internal/app/admin"
-	"DEMOX_ADMINAUTH/internal/app/apitest"
-	"DEMOX_ADMINAUTH/internal/app/auth"
-	"DEMOX_ADMINAUTH/internal/app/my"
-	"DEMOX_ADMINAUTH/internal/app/role"
-	"DEMOX_ADMINAUTH/internal/app/sys"
-	"DEMOX_ADMINAUTH/internal/ctx"
-	"DEMOX_ADMINAUTH/internal/router"
 	"github.com/gin-gonic/gin"
+	"goDemoX/internal/app/admin"
+	"goDemoX/internal/app/apitest"
+	"goDemoX/internal/app/auth"
+	"goDemoX/internal/app/my"
+	"goDemoX/internal/app/role"
+	"goDemoX/internal/app/sys"
+	"goDemoX/internal/ctx"
+	"goDemoX/internal/router"
 )
 
 var routes = []func(r *router.Router, appctx *ctx.AppContext){

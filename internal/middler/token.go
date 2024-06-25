@@ -1,12 +1,12 @@
 package middler
 
 import (
-	"DEMOX_ADMINAUTH/internal/ctx"
-	"DEMOX_ADMINAUTH/internal/pkg/api/hd"
 	"errors"
 	"github.com/gin-gonic/gin"
 	"github.com/golang-jwt/jwt/v4"
 	"github.com/golang-jwt/jwt/v4/request"
+	"goDemoX/internal/ctx"
+	"goDemoX/internal/pkg/api/hd"
 )
 
 const (

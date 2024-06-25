@@ -1,16 +1,16 @@
 package api
 
 import (
-	"DEMOX_ADMINAUTH/internal/app/admin/adminmodel"
-	"DEMOX_ADMINAUTH/internal/app/my/mymodel"
-	"DEMOX_ADMINAUTH/internal/app/my/myserver"
-	"DEMOX_ADMINAUTH/internal/ctx"
-	"DEMOX_ADMINAUTH/internal/pkg"
-	"DEMOX_ADMINAUTH/internal/pkg/api/hd"
-	"DEMOX_ADMINAUTH/internal/router"
 	"errors"
 	"fmt"
 	"github.com/gin-gonic/gin"
+	"goDemoX/internal/app/admin/adminmodel"
+	"goDemoX/internal/app/my/mymodel"
+	"goDemoX/internal/app/my/myserver"
+	"goDemoX/internal/ctx"
+	"goDemoX/internal/pkg"
+	"goDemoX/internal/pkg/api/hd"
+	"goDemoX/internal/router"
 	"gorm.io/gorm"
 	"time"
 )

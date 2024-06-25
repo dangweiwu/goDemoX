@@ -1,7 +1,7 @@
 package adminmodel
 
 import (
-	"DEMOX_ADMINAUTH/internal/pkg/dbtype"
+	"goDemoX/internal/pkg/dbtype"
 )
 
 type AdminPo struct {

@@ -1,11 +1,11 @@
 package middler
 
 import (
-	"DEMOX_ADMINAUTH/internal/ctx"
-	"DEMOX_ADMINAUTH/internal/pkg/api/hd"
-	"DEMOX_ADMINAUTH/internal/pkg/jwtx"
 	"fmt"
 	"github.com/gin-gonic/gin"
+	"goDemoX/internal/ctx"
+	"goDemoX/internal/pkg/api/hd"
+	"goDemoX/internal/pkg/jwtx"
 )
 
 func NoAuthErrResponse(c *gin.Context, data string) {

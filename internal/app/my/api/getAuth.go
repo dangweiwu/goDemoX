@@ -1,16 +1,16 @@
 package api
 
 import (
-	"DEMOX_ADMINAUTH/internal/app/my/mymodel"
-	"DEMOX_ADMINAUTH/internal/app/role/rolemodel"
-	"DEMOX_ADMINAUTH/internal/ctx"
-	"DEMOX_ADMINAUTH/internal/pkg/api/hd"
-	"DEMOX_ADMINAUTH/internal/router"
 	"context"
 	"encoding/json"
 	"errors"
 	"github.com/gin-gonic/gin"
 	"github.com/go-redis/redis/v8"
+	"goDemoX/internal/app/my/mymodel"
+	"goDemoX/internal/app/role/rolemodel"
+	"goDemoX/internal/ctx"
+	"goDemoX/internal/pkg/api/hd"
+	"goDemoX/internal/router"
 	"gorm.io/gorm"
 	"time"
 )

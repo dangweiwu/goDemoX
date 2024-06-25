@@ -1,9 +1,9 @@
 package router
 
 import (
-	"DEMOX_ADMINAUTH/internal/ctx"
-	"DEMOX_ADMINAUTH/internal/middler"
 	"github.com/gin-gonic/gin"
+	"goDemoX/internal/ctx"
+	"goDemoX/internal/middler"
 )
 
 func NewTestRouter(g *gin.Engine, appctx *ctx.AppContext) *Router {

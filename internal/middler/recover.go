@@ -1,11 +1,11 @@
 package middler
 
 import (
-	"DEMOX_ADMINAUTH/internal/ctx"
-	"DEMOX_ADMINAUTH/internal/pkg/logx"
 	"fmt"
 	"github.com/gin-contrib/requestid"
 	"github.com/gin-gonic/gin"
+	"goDemoX/internal/ctx"
+	"goDemoX/internal/pkg/logx"
 	"net"
 	"net/http"
 	"os"

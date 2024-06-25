@@ -1,6 +1,6 @@
 package authmodel
 
-import "DEMOX_ADMINAUTH/internal/pkg/dbtype"
+import "goDemoX/internal/pkg/dbtype"
 
 type AuthPo struct {
 	dbtype.Base

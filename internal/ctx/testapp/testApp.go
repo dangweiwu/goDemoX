@@ -1,21 +1,21 @@
 package testapp
 
 import (
-	"DEMOX_ADMINAUTH/internal/app/auth/authcheck"
-	"DEMOX_ADMINAUTH/internal/config"
-	"DEMOX_ADMINAUTH/internal/ctx"
-	"DEMOX_ADMINAUTH/internal/pkg/db/mysqlx"
-	"DEMOX_ADMINAUTH/internal/pkg/db/redisx"
-	"DEMOX_ADMINAUTH/internal/pkg/jwtx/jwtconfig"
-	"DEMOX_ADMINAUTH/internal/pkg/logx"
-	"DEMOX_ADMINAUTH/internal/pkg/observe/metricx"
-	"DEMOX_ADMINAUTH/internal/pkg/observe/tracex"
-	"DEMOX_ADMINAUTH/internal/pkg/utils"
 	"fmt"
 	mredis "github.com/alicebob/miniredis/v2"
 	"github.com/dolthub/go-mysql-server/server"
 	"github.com/gin-gonic/gin"
 	errs "github.com/pkg/errors"
+	"goDemoX/internal/app/auth/authcheck"
+	"goDemoX/internal/config"
+	"goDemoX/internal/ctx"
+	"goDemoX/internal/pkg/db/mysqlx"
+	"goDemoX/internal/pkg/db/redisx"
+	"goDemoX/internal/pkg/jwtx/jwtconfig"
+	"goDemoX/internal/pkg/logx"
+	"goDemoX/internal/pkg/observe/metricx"
+	"goDemoX/internal/pkg/observe/tracex"
+	"goDemoX/internal/pkg/utils"
 	"time"
 )
 

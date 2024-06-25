@@ -1,9 +1,9 @@
 package sys
 
 import (
-	"DEMOX_ADMINAUTH/internal/app/sys/api"
-	"DEMOX_ADMINAUTH/internal/ctx"
-	"DEMOX_ADMINAUTH/internal/router"
+	"goDemoX/internal/app/sys/api"
+	"goDemoX/internal/ctx"
+	"goDemoX/internal/router"
 )
 
 // @group | sys | 3 | 系统设置 | 包括链路追踪,指标采集

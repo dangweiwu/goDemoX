@@ -1,12 +1,12 @@
 package api
 
 import (
-	"DEMOX_ADMINAUTH/internal/ctx"
-	"DEMOX_ADMINAUTH/internal/pkg/api/hd"
-	"DEMOX_ADMINAUTH/internal/pkg/utils"
-	"DEMOX_ADMINAUTH/internal/router"
 	"github.com/gin-gonic/gin"
 	"go.opentelemetry.io/otel/attribute"
+	"goDemoX/internal/ctx"
+	"goDemoX/internal/pkg/api/hd"
+	"goDemoX/internal/pkg/utils"
+	"goDemoX/internal/router"
 	"log"
 )
 

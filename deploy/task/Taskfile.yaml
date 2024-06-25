@@ -43,7 +43,7 @@ tasks:
     ## 安装镜像
     dir: ./images
     vars:
-      imagesDir: "/root/DEMOX_ADMINAUTH/images"
+      imagesDir: "/root/goDemoX/images"
     cmds:
       - ssh root@{{.host}} 'mkdir -p {{.imagesDir}}'
       - scp  *.tar root@{{.host}}:{{.imagesDir}}

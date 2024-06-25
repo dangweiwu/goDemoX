@@ -1,10 +1,10 @@
 package api_test
 
 import (
-	"DEMOX_ADMINAUTH/internal/app/sys"
-	"DEMOX_ADMINAUTH/internal/ctx/testapp"
-	"DEMOX_ADMINAUTH/internal/router"
 	"github.com/gin-gonic/gin"
+	"goDemoX/internal/app/sys"
+	"goDemoX/internal/ctx/testapp"
+	"goDemoX/internal/router"
 	"testing"
 )
 

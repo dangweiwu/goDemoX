@@ -1,9 +1,9 @@
 package adminmodel
 
 import (
-	"DEMOX_ADMINAUTH/internal/pkg/jwtx"
 	"errors"
 	"fmt"
+	"goDemoX/internal/pkg/jwtx"
 	"time"
 )
 

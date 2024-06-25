@@ -1,12 +1,12 @@
 package observe
 
 import (
-	"DEMOX_ADMINAUTH/internal/pkg/observe/metricx"
 	"context"
 	"fmt"
 	"github.com/gin-gonic/gin"
 	"go.opentelemetry.io/otel/attribute"
 	gmetric "go.opentelemetry.io/otel/metric"
+	"goDemoX/internal/pkg/observe/metricx"
 	"log"
 	"time"
 )

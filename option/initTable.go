@@ -1,11 +1,11 @@
 package option
 
 import (
-	"DEMOX_ADMINAUTH/internal/app"
-	"DEMOX_ADMINAUTH/internal/config"
-	"DEMOX_ADMINAUTH/internal/ctx"
 	"fmt"
 	"github.com/dangweiwu/ginpro/pkg/yamconfig"
+	"goDemoX/internal/app"
+	"goDemoX/internal/config"
+	"goDemoX/internal/ctx"
 	"log"
 )
 

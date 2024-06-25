@@ -1,8 +1,8 @@
 package router
 
 import (
-	"DEMOX_ADMINAUTH/internal/ctx"
 	"github.com/gin-gonic/gin"
+	"goDemoX/internal/ctx"
 )
 
 type (

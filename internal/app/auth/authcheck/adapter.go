@@ -1,12 +1,12 @@
 package authcheck
 
 import (
-	"DEMOX_ADMINAUTH/internal/app/auth/authmodel"
-	"DEMOX_ADMINAUTH/internal/app/role/rolemodel"
-	"DEMOX_ADMINAUTH/internal/pkg/dbtype"
 	"errors"
 	"github.com/casbin/casbin/v2/model"
 	"github.com/casbin/casbin/v2/persist"
+	"goDemoX/internal/app/auth/authmodel"
+	"goDemoX/internal/app/role/rolemodel"
+	"goDemoX/internal/pkg/dbtype"
 	"gorm.io/gorm"
 )
 

@@ -1,11 +1,11 @@
 package option
 
 import (
-	"DEMOX_ADMINAUTH/internal/app/admin/adminmodel"
-	"DEMOX_ADMINAUTH/internal/config"
-	"DEMOX_ADMINAUTH/internal/ctx"
-	"DEMOX_ADMINAUTH/internal/pkg"
 	"github.com/dangweiwu/ginpro/pkg/yamconfig"
+	"goDemoX/internal/app/admin/adminmodel"
+	"goDemoX/internal/config"
+	"goDemoX/internal/ctx"
+	"goDemoX/internal/pkg"
 	"gorm.io/gorm"
 	"log"
 )

@@ -1,11 +1,11 @@
 package myserver
 
 import (
-	"DEMOX_ADMINAUTH/internal/app/my/mymodel"
 	"context"
 	"errors"
 	"github.com/go-redis/redis/v8"
 	"github.com/google/uuid"
+	"goDemoX/internal/app/my/mymodel"
 	"strings"
 )
 

@@ -1,13 +1,13 @@
 package api_test
 
 import (
-	"DEMOX_ADMINAUTH/internal/app/auth"
-	"DEMOX_ADMINAUTH/internal/app/auth/authmodel"
-	"DEMOX_ADMINAUTH/internal/app/role/rolemodel"
-	"DEMOX_ADMINAUTH/internal/ctx/testapp"
-	"DEMOX_ADMINAUTH/internal/pkg/dbtype"
-	"DEMOX_ADMINAUTH/internal/router"
 	"github.com/gin-gonic/gin"
+	"goDemoX/internal/app/auth"
+	"goDemoX/internal/app/auth/authmodel"
+	"goDemoX/internal/app/role/rolemodel"
+	"goDemoX/internal/ctx/testapp"
+	"goDemoX/internal/pkg/dbtype"
+	"goDemoX/internal/router"
 	"testing"
 )
 

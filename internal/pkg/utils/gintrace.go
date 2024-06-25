@@ -1,8 +1,8 @@
 package utils
 
 import (
-	"DEMOX_ADMINAUTH/internal/pkg/observe/tracex"
 	"github.com/gin-gonic/gin"
+	"goDemoX/internal/pkg/observe/tracex"
 )
 
 func WithGinTraceStart(c *gin.Context, name string) tracex.Spanx {

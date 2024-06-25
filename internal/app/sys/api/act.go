@@ -1,14 +1,14 @@
 package api
 
 import (
-	"DEMOX_ADMINAUTH/internal/app/sys/sysmodel"
-	"DEMOX_ADMINAUTH/internal/ctx"
-	"DEMOX_ADMINAUTH/internal/pkg/api/hd"
-	"DEMOX_ADMINAUTH/internal/pkg/observe/metricx"
-	"DEMOX_ADMINAUTH/internal/pkg/observe/tracex"
-	"DEMOX_ADMINAUTH/internal/router"
 	"errors"
 	"github.com/gin-gonic/gin"
+	"goDemoX/internal/app/sys/sysmodel"
+	"goDemoX/internal/ctx"
+	"goDemoX/internal/pkg/api/hd"
+	"goDemoX/internal/pkg/observe/metricx"
+	"goDemoX/internal/pkg/observe/tracex"
+	"goDemoX/internal/router"
 )
 
 type SysAct struct {

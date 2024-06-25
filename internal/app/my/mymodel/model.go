@@ -1,7 +1,7 @@
 package mymodel
 
 import (
-	"DEMOX_ADMINAUTH/internal/pkg/dbtype"
+	"goDemoX/internal/pkg/dbtype"
 )
 
 // my info

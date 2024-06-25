@@ -4,7 +4,7 @@ vars:
   host: "156.238.224.117"
   groupname: "demox_adminauth"
   dockerName: "DEMO_ADMINAUTH_admin"
-  prodRoot: "/root/DEMOX_ADMINAUTH"
+  prodRoot: "/root/goDemoX"
   prodNetWork: ""
 tasks:
 
@@ -14,11 +14,11 @@ tasks:
       coverout: "cover.out"
       htmlout: "cover.html"
       coverPack: >
-        DEMOX_ADMINAUTH/internal/app/...,
-      #DEMOX_ADMINAUTH/internal/middler/...
+        goDemoX/internal/app/...,
+      #goDemoX/internal/middler/...
       testPack: >
-        DEMOX_ADMINAUTH/internal/app/...
-      #DEMOX_ADMINAUTH/internal/middler/...
+        goDemoX/internal/app/...
+      #goDemoX/internal/middler/...
     cmds:
       - go test -cover 
         -coverprofile="{{.coverout}}"

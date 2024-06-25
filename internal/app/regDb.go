@@ -1,10 +1,10 @@
 package app
 
 import (
-	"DEMOX_ADMINAUTH/internal/app/admin/adminmodel"
-	"DEMOX_ADMINAUTH/internal/app/auth/authmodel"
-	"DEMOX_ADMINAUTH/internal/app/role/rolemodel"
-	"DEMOX_ADMINAUTH/internal/ctx"
+	"goDemoX/internal/app/admin/adminmodel"
+	"goDemoX/internal/app/auth/authmodel"
+	"goDemoX/internal/app/role/rolemodel"
+	"goDemoX/internal/ctx"
 )
 
 var Tables = []interface{}{

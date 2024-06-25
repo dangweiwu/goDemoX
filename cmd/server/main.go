@@ -1,8 +1,8 @@
 package main
 
 import (
-	"DEMOX_ADMINAUTH/option"
 	"github.com/jessevdk/go-flags"
+	"goDemoX/option"
 )
 
 // @base| xx系统管理 | v0.0.1

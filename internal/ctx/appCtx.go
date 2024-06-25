@@ -1,14 +1,14 @@
 package ctx
 
 import (
-	"DEMOX_ADMINAUTH/internal/app/auth/authcheck"
-	"DEMOX_ADMINAUTH/internal/config"
-	"DEMOX_ADMINAUTH/internal/pkg/db/mysqlx"
-	"DEMOX_ADMINAUTH/internal/pkg/db/redisx"
-	"DEMOX_ADMINAUTH/internal/pkg/logx"
 	"github.com/go-redis/redis/v8"
 	errs "github.com/pkg/errors"
 	"go.uber.org/zap"
+	"goDemoX/internal/app/auth/authcheck"
+	"goDemoX/internal/config"
+	"goDemoX/internal/pkg/db/mysqlx"
+	"goDemoX/internal/pkg/db/redisx"
+	"goDemoX/internal/pkg/logx"
 	"gorm.io/gorm"
 	"time"
 )

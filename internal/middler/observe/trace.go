@@ -1,10 +1,10 @@
 package observe
 
 import (
-	"DEMOX_ADMINAUTH/internal/pkg/observe/tracex"
-	"DEMOX_ADMINAUTH/internal/pkg/utils"
 	"github.com/gin-gonic/gin"
 	"go.opentelemetry.io/otel/attribute"
+	"goDemoX/internal/pkg/observe/tracex"
+	"goDemoX/internal/pkg/utils"
 )
 
 func Trace(tracename string) gin.HandlerFunc {

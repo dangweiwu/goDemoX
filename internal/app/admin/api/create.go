@@ -1,14 +1,14 @@
 package api
 
 import (
-	"DEMOX_ADMINAUTH/internal/app/admin/adminmodel"
-	"DEMOX_ADMINAUTH/internal/ctx"
-	"DEMOX_ADMINAUTH/internal/pkg"
-	"DEMOX_ADMINAUTH/internal/pkg/api/hd"
-	"DEMOX_ADMINAUTH/internal/router"
 	"errors"
 	"github.com/gin-gonic/gin"
 	errs "github.com/pkg/errors"
+	"goDemoX/internal/app/admin/adminmodel"
+	"goDemoX/internal/ctx"
+	"goDemoX/internal/pkg"
+	"goDemoX/internal/pkg/api/hd"
+	"goDemoX/internal/router"
 )
 
 type AdminCreate struct {

@@ -1,9 +1,9 @@
 package middler
 
 import (
-	"DEMOX_ADMINAUTH/internal/ctx"
 	"github.com/gin-contrib/requestid"
 	"github.com/gin-gonic/gin"
+	"goDemoX/internal/ctx"
 )
 
 // 批量注册全局中间件
