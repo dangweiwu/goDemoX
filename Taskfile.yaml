@@ -3,7 +3,7 @@ version: '3'
 vars:
   host: "156.238.224.117"
   groupname: "demox_adminauth"
-  dockerName: "DEMO_ADMINAUTH_admin"
+  dockerName: "goDemoX_admin"
   prodRoot: "/root/goDemoX"
   prodNetWork: ""
 tasks:
@@ -13,10 +13,10 @@ tasks:
     vars:
       coverout: "cover.out"
       htmlout: "cover.html"
-      coverPack: >
-        goDemoX/internal/app/...,
-      #goDemoX/internal/middler/...
-      testPack: >
+      coverPack: >-
+        goDemoX/internal/app/...
+
+      testPack: >-
         goDemoX/internal/app/...
       #goDemoX/internal/middler/...
     cmds:

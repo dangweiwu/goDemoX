@@ -2,10 +2,10 @@ package option
 
 import (
 	"fmt"
-	"github.com/dangweiwu/ginpro/pkg/yamconfig"
 	"goDemoX/internal/app"
 	"goDemoX/internal/config"
 	"goDemoX/internal/ctx"
+	"goDemoX/internal/pkg/yamconfig"
 	"log"
 )
 

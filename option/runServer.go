@@ -1,7 +1,6 @@
 package option
 
 import (
-	"github.com/dangweiwu/ginpro/pkg/yamconfig"
 	"github.com/gin-gonic/gin"
 	"goDemoX/internal/app"
 	"goDemoX/internal/config"
@@ -12,6 +11,7 @@ import (
 	"goDemoX/internal/pkg/logx"
 	"goDemoX/internal/pkg/observe/metricx"
 	"goDemoX/internal/pkg/observe/tracex"
+	"goDemoX/internal/pkg/yamconfig"
 )
 
 type RunServe struct {

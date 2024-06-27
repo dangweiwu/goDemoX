@@ -1,11 +1,11 @@
 package option
 
 import (
-	"github.com/dangweiwu/ginpro/pkg/yamconfig"
 	"goDemoX/internal/app/admin/adminmodel"
 	"goDemoX/internal/config"
 	"goDemoX/internal/ctx"
 	"goDemoX/internal/pkg"
+	"goDemoX/internal/pkg/yamconfig"
 	"gorm.io/gorm"
 	"log"
 )
