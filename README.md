@@ -25,8 +25,7 @@ _更像一个DEMO 易于修改定制_
 ### 使用说明:
 ```
 go install github.com/go-task/task/v3/cmd/task@latest
-go install github.com/dangweiwu/goDemoX
-
+git clone github.com/dangweiwu/goDemoX
 ```
 
 ---
